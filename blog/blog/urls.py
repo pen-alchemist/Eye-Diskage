@@ -1,5 +1,5 @@
 """
-URL configuration for blog project.
+URL configuration for colyte project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -15,8 +15,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf import settings
+from django.urls import path, include
+from django.conf.urls.static import static
+
+from blog.backend import urls
+
+
+admin.site.site_header = "Login to Simple Blog"
+admin.site.site_title = "Simple Blog Admin Portal"
+admin.site.index_title = "Welcome to Simple Blog Admin Portal"
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(
+        'admin/',
+        admin.site.urls
+    ),
+    path('blog/', include(urls)),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
