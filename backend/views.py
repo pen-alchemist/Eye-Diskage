@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny
 
-from blog.backend.models import BlogPost
+from backend.models import BlogPost
 
 
 @csrf_exempt
