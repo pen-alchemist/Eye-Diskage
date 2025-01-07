@@ -1,0 +1,4 @@
+selenium==4.22.0
+webdriver-manager==4.0.2
+pytest==7.1.2
+pytest-django==4.9.0
