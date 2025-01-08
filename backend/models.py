@@ -9,7 +9,7 @@ class BlogPost(models.Model):
     post_slug = models.SlugField(max_length=30, unique=True)
     post_content = models.TextField('Content', max_length=4000)
 
-    post_image = models.ImageField(upload_to='images/')
+    post_image = models.ImageField(upload_to='images/', blank=True)
 
     # Post model created date
     created_date = models.DateTimeField(

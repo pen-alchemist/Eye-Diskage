@@ -1,3 +1,5 @@
+import json
+
 from django.core.paginator import Paginator
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import EmptyPage
@@ -22,18 +24,21 @@ def blog_collection_view(request):
     posts = BlogPost.objects.all()
 
     for post in posts:
+        _title = getattr(post, 'post_title')
         _slug = getattr(post, 'post_slug')
         _content = getattr(post, 'post_content')
         _date = getattr(post, 'created_date')
         _img = getattr(post, 'post_image')
         date_str = _date.strftime('%Y-%m-%d')
         short_content = f'{_content[0:400]}...'
+
         posts_list.append(
             {
+                'post_title': _title,
                 'post_content_short': short_content,
                 'post_slug': _slug,
                 'post_date': date_str,
-                'post_image': _img.url,
+                'post_image': json.dumps(str(_img)),
             }
         )
 
