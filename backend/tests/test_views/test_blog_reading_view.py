@@ -9,7 +9,7 @@ from rest_framework.test import APIRequestFactory
 
 from backend.models import BlogPost
 from backend.tests.config.config_make_string import make_random_string
-from backend.views import blog_collection_view
+from backend.views import blog_reading_view
 
 
 class TestBlogReadingEndpoint(TestCase):
@@ -53,7 +53,7 @@ class TestBlogReadingEndpoint(TestCase):
         """Test that posts collection view returns 200 status code"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = blog_reading_view(request, self.random_slug)
 
         self.assertEqual(response.status_code, 200)
 
@@ -61,7 +61,7 @@ class TestBlogReadingEndpoint(TestCase):
         """Test that posts collection view returns correct title"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = blog_reading_view(request, self.random_slug)
         json_data = json.loads(response.content)
         post_title = json_data['post_title']
 
@@ -72,8 +72,8 @@ class TestBlogReadingEndpoint(TestCase):
     def test_posts_all_content_full_field(self):
         """Test that posts collection view returns correct short content"""
 
-        request = self.factory.get()
-        response = blog_collection_view(request)
+        request = self.factory.get(self.url)
+        response = blog_reading_view(request, self.random_slug)
         json_data = json.loads(response.content)
         post_content_full = json_data['post_content']
 
@@ -85,7 +85,7 @@ class TestBlogReadingEndpoint(TestCase):
         """Test that posts collection view returns correct date"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = blog_reading_view(request, self.random_slug)
         json_data = json.loads(response.content)
         date_actual = json_data['post_date']
         date_expected = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -96,7 +96,7 @@ class TestBlogReadingEndpoint(TestCase):
         """Test that posts collection view returns correct null image"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = blog_reading_view(request, self.random_slug)
         json_data = json.loads(response.content)
         post_image = json_data['post_image']
 

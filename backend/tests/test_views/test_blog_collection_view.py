@@ -23,6 +23,7 @@ class TestAllBlogsEndpoint(TestCase):
         self.random_title = make_random_string(200)
         self.random_slug = make_random_string(30)
         self.random_content = make_random_string(4000)
+        self.url = '/blog/api/blog/all/'
 
         # Creating user
         self.user = BlogPost.objects.create(
@@ -51,7 +52,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_response_status(self):
         """Test that posts collection view returns 200 status code"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
 
         self.assertEqual(response.status_code, 200)
@@ -59,7 +60,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_title_field(self):
         """Test that posts collection view returns correct title"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         post_title = json_data['posts'][0]['post_title']
@@ -71,7 +72,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_content_short_field(self):
         """Test that posts collection view returns correct short content"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         post_content_actual = json_data['posts'][0]['post_content_short']
@@ -85,7 +86,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_slug_field(self):
         """Test that posts collection view returns correct slug"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         post_slug = json_data['posts'][0]['post_slug']
@@ -97,7 +98,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_date_field(self):
         """Test that posts collection view returns correct date"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         date_actual = json_data['posts'][0]['post_date']
@@ -108,7 +109,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_null_image_field(self):
         """Test that posts collection view returns correct null image"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         post_image = json_data['posts'][0]['post_image']
@@ -118,7 +119,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_no_next_page_field(self):
         """Test that posts collection view returns no next page (false)"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         is_next = json_data['is_next']
@@ -128,7 +129,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_no_previous_page_field(self):
         """Test that posts collection view returns no previous page (false)"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         is_previous = json_data['is_previous']
@@ -138,7 +139,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_number_of_current_page_field(self):
         """Test that posts collection view returns current page number"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         current = json_data['current']
@@ -148,7 +149,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_number_of_pages_count_field(self):
         """Test that posts collection view returns number of pages"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         pages_count = json_data['pages_count']
@@ -158,7 +159,7 @@ class TestAllBlogsEndpoint(TestCase):
     def test_posts_all_number_of_posts_count_field(self):
         """Test that posts collection view returns number of posts"""
 
-        request = self.factory.get('/blog/api/blog/all/')
+        request = self.factory.get(self.url)
         response = blog_collection_view(request)
         json_data = json.loads(response.content)
         posts_count = json_data['posts_count']
