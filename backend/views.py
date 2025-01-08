@@ -67,19 +67,16 @@ def blog_collection_view(request):
 def blog_reading_view(request, slug):
     """Returns 1 Blog Post (title, content, date, image) using JSONResponse"""
 
-    post = get_object_or_404(BlogPost, post_slug=slug)
+    post = get_object_or_404(BlogPost, post_slug__exact=slug)
     _date = getattr(post, 'created_date')
     _img = getattr(post, 'post_image')
     date_str = _date.strftime('%Y-%m-%d')
 
-    data = {
+    response = {
         'post_title': getattr(post, 'post_title'),
         'post_content': getattr(post, 'post_content'),
         'post_date': date_str,
-        'post_image': _img.url,
-    }
-    response = {
-        'data': data
+        'post_image': json.dumps(str(_img)),
     }
 
     return JsonResponse(response)
