@@ -55,24 +55,18 @@ const fetchData = async (page = 1) => {
   return (
     <div className="home-container">
       <header className="header">
-        <p>
-            <img style={{ width: "20%", height: "10%", display: "block", marginLeft: "auto", marginRight: "auto" }} src={logo} />
-        </p>
-        <h1>All Blogs</h1>
+            <img src={logo} />
+            <h2> Simple Django and React Blog with Testing Automation  </h2>
         <nav>
-          <ul>
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="/about">About</a></li>
-          </ul>
+            <button className="nav-button_pages"><Link to="/blog">Blog</Link></button>
+            <button className="nav-button_pages"><Link to="/about">About</Link></button>
         </nav>
       </header>
 
       <main className="main">
         <section className="hero">
-          <h2> Simple Django and React Blog with Testing Automation  </h2>
+            <h1>All Blogs</h1>
         </section>
-
-        <h2> Posts </h2>
         <section className="posts">
             <div className="parent">
                 <div className="content">
