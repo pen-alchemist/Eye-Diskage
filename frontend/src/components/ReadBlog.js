@@ -48,7 +48,7 @@ const fetchData = async () => {
     <div className="home-container">
       <header className="header">
         <p>
-            <img style={{ width: "20%", height: "10%", display: "block", marginLeft: "auto", marginRight: "auto" }} src={logo} />
+            <img src={logo} />
         </p>
         <h1>Read Blog Post</h1>
         <nav>
