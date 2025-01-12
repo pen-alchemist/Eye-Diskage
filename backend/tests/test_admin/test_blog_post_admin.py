@@ -22,7 +22,7 @@ from backend.tests.config.config_user_random import make_random_password
 class TestBlogPostAdmin(TestCase):
 
     def setUp(self):
-        """Testing setup. Returns blog post object"""
+        """Testing setup. Returns blog post admin object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
@@ -67,7 +67,7 @@ class TestBlogPostAdmin(TestCase):
         return self.blog_model_admin
 
     def tearDown(self):
-        """Testing teardown. Deleting blog post object"""
+        """Testing teardown. Deleting user object and blog post admin object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
@@ -81,35 +81,37 @@ class TestBlogPostAdmin(TestCase):
         print('All testing data was cleared')
 
     def test_post_admin_title_field(self):
-        """Test that post title is correct"""
+        """Test that post (created in admin panel) title is correct"""
 
         post_title = BlogPost.objects.all()[0].post_title
 
         self.assertEqual(post_title, self.random_title)
 
     def test_post_admin_slug_field(self):
-        """Test that post slug is correct"""
+        """Test that post (created in admin panel) slug is correct"""
 
         post_slug = BlogPost.objects.all()[0].post_slug
 
         self.assertEqual(post_slug, self.random_slug)
 
     def test_post_admin_content_field(self):
-        """Test that post content is correct"""
+        """Test that post (created in admin panel) content is correct"""
 
         post_content = BlogPost.objects.all()[0].post_content
 
         self.assertEqual(post_content, self.random_content)
 
     def test_post_admin_str_method(self):
-        """Test that post str method returns correct value (post title)"""
+        """Test that post (created in admin panel)
+        str method returns correct value (post title)"""
 
         post_str = BlogPost.objects.all()[0].__str__()
 
         self.assertEqual(post_str, self.random_title)
 
     def test_post_admin_get_post_pk_type(self):
-        """Test that post get_post_pk method returns correct type (uuid)"""
+        """Test that post (created in admin panel)
+        get_post_pk method returns correct type (uuid)"""
 
         post_pk = BlogPost.objects.all()[0].get_post_pk()
 
