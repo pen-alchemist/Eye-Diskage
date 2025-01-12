@@ -5,26 +5,29 @@ from django.test.selenium import LiveServerTestCase
 from django.contrib.contenttypes.models import ContentType
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 
 
-class TestAllBlogsPageChrome(LiveServerTestCase):
+class TestAllBlogsPageFirefox(LiveServerTestCase):
 
     def setUp(self):
         """Testing setup. Make the selenium setUp.
-        Returns chrome driver"""
+        Returns firefox driver"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
 
-        service = Service(f'{os.getcwd()}/chromedriver')
+        install_dir = "/snap/firefox/current/usr/lib/firefox"
+        driver_loc = os.path.join(install_dir, "geckodriver")
+        binary_loc = os.path.join(install_dir, "firefox")
+        service = Service(driver_loc)
 
         # Create Chrome Options object
         options = Options()
-        options.add_argument("--disable-extensions")
+        options.binary_location = binary_loc
 
-        self.driver = webdriver.Chrome(service=service, options=options)
+        self.driver = webdriver.Firefox(service=service, options=options)
         self.driver.maximize_window()
 
     def tearDown(self):
@@ -42,7 +45,7 @@ class TestAllBlogsPageChrome(LiveServerTestCase):
         print('All testing data was cleared')
 
     def test_posts_all_page_title(self):
-        """Test that page title is correct"""
+        """Test that blogs page title is correct"""
 
         target_url = 'http://localhost:3000/'
         self.driver.get(target_url)
