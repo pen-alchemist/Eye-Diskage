@@ -32,7 +32,7 @@ urlpatterns = [
         'admin/',
         admin.site.urls
     ),
-    path('blog/', include(urls)),
+    path('api/', include(urls)),
 ]
 
 
