@@ -1,4 +1,5 @@
 import resource
+import uuid
 
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
@@ -69,9 +70,16 @@ class TestBlogPost(TestCase):
 
         self.assertEqual(post_str, self.random_title)
 
-    def test_post_get_post_pk(self):
+    def test_post_get_post_pk_value(self):
         """Test that post get_post_pk method returns correct value (post pk)"""
 
         post_pk = BlogPost.objects.all()[0].get_post_pk()
 
         self.assertEqual(post_pk, self.blog_post.pk)
+
+    def test_post_get_post_pk_type(self):
+        """Test that post get_post_pk method returns correct type (uuid)"""
+
+        post_pk = BlogPost.objects.all()[0].get_post_pk()
+
+        self.assertEqual(type(post_pk), uuid.UUID)

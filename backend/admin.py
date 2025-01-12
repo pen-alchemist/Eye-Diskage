@@ -9,5 +9,6 @@ class BlogPostAdmin(admin.ModelAdmin):
     search_fields = ('post_title', 'post_content')
     ordering = ('-created_date',)
     date_hierarchy = 'created_date'
+    readonly_fields = ('post_pk',)
 
 admin.site.register(BlogPost, BlogPostAdmin)
