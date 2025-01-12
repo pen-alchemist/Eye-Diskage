@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Blog from './components/Blog';
-import ReadBlog from './components/ReadBlog';
+import Main from './components/MainPage';
+import ReadPost from './components/ReadPostPage';
 import About from './components/About';
 import Auth from './components/Auth';
 
@@ -30,8 +30,8 @@ function App() {
   return (
     <Router>
         <Routes>
-            <Route path="/blog" element={<Blog authStatus={authStatus} />} />
-            <Route path="/blog/post/:slug" element={<ReadBlog authStatus={authStatus} />} />
+            <Route path="/main" element={<Main authStatus={authStatus} />} />
+            <Route path="/blog/post/:slug" element={<ReadPost authStatus={authStatus} />} />
             <Route path="/about" element={<About authStatus={authStatus} />} />
             <Route path="/" element={<Navigate replace to="/blog" />} />
         </Routes>

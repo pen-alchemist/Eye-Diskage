@@ -1,6 +1,6 @@
  import React, { useEffect, useState } from 'react';
  import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
- import './ReadBlogStyle.css';
+ import './ReadPostStyle.css';
  import logo from './logo.png'
  import axios from 'axios';
 
@@ -9,7 +9,7 @@
 
  const API_URL = process.env.REACT_APP_API_URL || '';
 
- const ReadBlog = ({ authStatus }) => {
+ const ReadPost = ({ authStatus }) => {
   const { slug } = useParams();
   const [data, setData] = useState({
       post_title: '',
@@ -20,7 +20,7 @@
 
 const fetchData = async () => {
   try {
-    const response = await axios.get(`${API_URL}/blog/api/blog/read/${slug}/`, {
+    const response = await axios.get(`${API_URL}/api/blog/read/${slug}/`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -53,7 +53,7 @@ const fetchData = async () => {
         <h1>Read Blog Post</h1>
         <nav>
           <ul>
-            <li><a href="/blog">Blog</a></li>
+            <li><a href="/main">Blog</a></li>
             <li><a href="/about">About</a></li>
           </ul>
         </nav>
@@ -102,4 +102,4 @@ const fetchData = async () => {
   );
 };
 
- export default ReadBlog;
+ export default ReadPost;

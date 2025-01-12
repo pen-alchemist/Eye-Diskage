@@ -43,7 +43,7 @@ const fetchData = async () => {
             <img src={logo} />
             <h2> Simple Django and React Blog with Testing Automation  </h2>
         <nav>
-            <button className="nav-button_pages"><Link to="/blog">Blog</Link></button>
+            <button className="nav-button_pages"><Link to="/main">Blog</Link></button>
             <button className="nav-button_pages"><Link to="/about">About</Link></button>
         </nav>
       </header>

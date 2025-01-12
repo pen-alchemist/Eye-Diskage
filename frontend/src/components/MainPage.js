@@ -1,6 +1,6 @@
  import React, { useEffect, useState } from 'react';
  import { Link, useNavigate, useLocation } from 'react-router-dom';
- import './BlogStyle.css';
+ import './MainStyle.css';
  import logo from './logo.png'
  import axios from 'axios';
 
@@ -9,7 +9,7 @@
 
  const API_URL = process.env.REACT_APP_API_URL || '';
 
- const Blog = ({ authStatus }) => {
+ const Main = ({ authStatus }) => {
   const navigate = useNavigate();
     const location = useLocation();
     const [data, setData] = useState({
@@ -58,7 +58,7 @@ const fetchData = async (page = 1) => {
             <img src={logo} />
             <h2> Simple Django and React Blog with Testing Automation  </h2>
         <nav>
-            <button className="nav-button_pages"><Link to="/blog">Blog</Link></button>
+            <button className="nav-button_pages"><Link to="/main">Blog</Link></button>
             <button className="nav-button_pages"><Link to="/about">About</Link></button>
         </nav>
       </header>
@@ -115,4 +115,4 @@ const fetchData = async (page = 1) => {
   );
 };
 
- export default Blog;
+ export default Main;
