@@ -16,7 +16,7 @@ from backend.models import BlogPost
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([AllowAny,])
-def blog_collection_view(request):
+def main_page_view(request):
     """Returns all Blog Posts with pagination (10 per page) using JSONResponse"""
 
     posts_list = []
@@ -64,7 +64,7 @@ def blog_collection_view(request):
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([AllowAny,])
-def blog_reading_view(request, slug):
+def post_read_view(request, slug):
     """Returns 1 Blog Post (title, content, date, image) using JSONResponse"""
 
     post = get_object_or_404(BlogPost, post_slug__exact=slug)

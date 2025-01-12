@@ -9,10 +9,10 @@ from rest_framework.test import APIRequestFactory
 
 from backend.models import BlogPost
 from backend.tests.config.config_make_string import make_random_string
-from backend.views import blog_collection_view
+from backend.views import main_page_view
 
 
-class TestAllBlogsEndpoint(TestCase):
+class TestMainPageEndpoint(TestCase):
 
     def setUp(self):
         """Testing setup. Returns API factory object"""
@@ -49,19 +49,19 @@ class TestAllBlogsEndpoint(TestCase):
         del self.factory
         print('All testing data was cleared')
 
-    def test_posts_all_response_status(self):
+    def test_main_page_response_status(self):
         """Test that posts collection view returns 200 status code"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
 
         self.assertEqual(response.status_code, 200)
 
-    def test_posts_all_title_field(self):
+    def test_main_page_title_field(self):
         """Test that posts collection view returns correct title"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         post_title = json_data['posts'][0]['post_title']
 
@@ -69,11 +69,11 @@ class TestAllBlogsEndpoint(TestCase):
         self.assertTrue(len(post_title) <= 200)
         self.assertTrue(len(post_title) > 0)
 
-    def test_posts_all_content_short_field(self):
+    def test_main_page_content_short_field(self):
         """Test that posts collection view returns correct short content"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         post_content_actual = json_data['posts'][0]['post_content_short']
         post_content_expected = f'{self.random_content[0:400]}...'
@@ -83,11 +83,11 @@ class TestAllBlogsEndpoint(TestCase):
         self.assertNotEqual(post_content_actual, self.random_content)
         self.assertEqual(len(post_content_actual), 403)
 
-    def test_posts_all_slug_field(self):
+    def test_main_page_slug_field(self):
         """Test that posts collection view returns correct slug"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         post_slug = json_data['posts'][0]['post_slug']
 
@@ -95,72 +95,72 @@ class TestAllBlogsEndpoint(TestCase):
         self.assertTrue(len(post_slug) <= 30)
         self.assertTrue(len(post_slug) > 0)
 
-    def test_posts_all_date_field(self):
+    def test_main_page_date_field(self):
         """Test that posts collection view returns correct date"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         date_actual = json_data['posts'][0]['post_date']
         date_expected = datetime.datetime.now().strftime('%Y-%m-%d')
 
         self.assertEqual(date_actual, date_expected)
 
-    def test_posts_all_null_image_field(self):
+    def test_main_page_null_image_field(self):
         """Test that posts collection view returns correct null image"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         post_image = json_data['posts'][0]['post_image']
 
         self.assertEqual(post_image, '""')
 
-    def test_posts_all_no_next_page_field(self):
+    def test_main_page_no_next_page_field(self):
         """Test that posts collection view returns no next page (false)"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         is_next = json_data['is_next']
 
         self.assertFalse(is_next)
 
-    def test_posts_all_no_previous_page_field(self):
+    def test_main_page_no_previous_page_field(self):
         """Test that posts collection view returns no previous page (false)"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         is_previous = json_data['is_previous']
 
         self.assertFalse(is_previous)
 
-    def test_posts_all_number_of_current_page_field(self):
+    def test_main_page_number_of_current_page_field(self):
         """Test that posts collection view returns current page number"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         current = json_data['current']
 
         self.assertEqual(current, 1)
 
-    def test_posts_all_number_of_pages_count_field(self):
+    def test_main_page_number_of_pages_count_field(self):
         """Test that posts collection view returns number of pages"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         pages_count = json_data['pages_count']
 
         self.assertEqual(pages_count, 1)
 
-    def test_posts_all_number_of_posts_count_field(self):
+    def test_main_page_number_of_posts_count_field(self):
         """Test that posts collection view returns number of posts"""
 
         request = self.factory.get(self.url)
-        response = blog_collection_view(request)
+        response = main_page_view(request)
         json_data = json.loads(response.content)
         posts_count = json_data['posts_count']
 
