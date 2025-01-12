@@ -8,6 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
+from functional_tests import blog_collection_page as page
+
 
 class TestAllBlogsPageChrome(LiveServerTestCase):
 
@@ -26,6 +28,7 @@ class TestAllBlogsPageChrome(LiveServerTestCase):
 
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.maximize_window()
+        self.driver.get('http://localhost:3000/')
 
     def tearDown(self):
         """Testing teardown. Driver quit (browser quit)"""
@@ -44,7 +47,7 @@ class TestAllBlogsPageChrome(LiveServerTestCase):
     def test_posts_all_page_title(self):
         """Test that blogs page title is correct"""
 
-        target_url = 'http://localhost:3000/'
-        self.driver.get(target_url)
-
-        self.assertEqual(self.driver.title, "React App")
+        # Load the main page. In this case the home page of Blog.
+        main_page = page.MainPage(self.driver)
+        # Checks if the word "React App" is in title
+        self.assertTrue(main_page.is_title_matches(), 'React App title doesn\'t match.')
