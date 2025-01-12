@@ -8,7 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
-from functional_tests import blog_collection_page as page
+from functional_tests import main_page as page
 
 
 class TestAllBlogsPageFirefox(LiveServerTestCase):
