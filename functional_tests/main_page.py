@@ -66,3 +66,19 @@ class MainPage(BasePage):
         expected_counter = 'Page 1 of 1'
 
         return expected_counter == element.text
+
+    def click_page_previous_button(self):
+        """Triggers the previous button and check is it disabled"""
+
+        element = self.driver.find_element(*MainPageLocators.PREVIOUS_BUTTON)
+        expected_btn_status = element.is_enabled()
+
+        return expected_btn_status
+
+    def click_page_next_button(self):
+        """Triggers the next button and check is it disabled"""
+
+        element = self.driver.find_element(*MainPageLocators.NEXT_BUTTON)
+        expected_btn_status = element.is_enabled()
+
+        return expected_btn_status

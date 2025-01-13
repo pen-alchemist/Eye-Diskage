@@ -108,3 +108,22 @@ class TestMainPageFirefox(LiveServerTestCase):
             main_page.is_pages_counter_matches(),
             'Main Page Pages Counter doesn\'t match.'
         )
+
+    def test_previous_button_click(self):
+        """Test that previous button is disabled on Main Page"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertFalse(
+            main_page.click_page_previous_button(),
+            'Previous button is not disabled on Main Page.'
+        )
+
+    def test_next_button_click(self):
+        """Test that next button is disabled on Main Page"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertFalse(
+            main_page.click_page_next_button(),
+            'Previous button is not disabled on Main Page'
+        )
+

@@ -10,3 +10,5 @@ class MainPageLocators(object):
     SUB_HEADER = (By.TAG_NAME, 'h1')
     NO_POSTS_MESSAGE = (By.CLASS_NAME, 'no-posts')
     PAGES_COUNTER = (By.ID, 'pages-counter')
+    PREVIOUS_BUTTON = (By.XPATH, '//button[span[text()=\'Previous\']]')
+    NEXT_BUTTON = (By.XPATH, '//button[span[text()=\'Next\']]')
