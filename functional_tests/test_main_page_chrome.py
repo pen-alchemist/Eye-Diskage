@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from functional_tests import main_page as page
 
 
-class TestAllBlogsPageChrome(LiveServerTestCase):
+class TestMainPageChrome(LiveServerTestCase):
 
     def setUp(self):
         """Testing setup. Make the selenium setUp.
@@ -44,7 +44,7 @@ class TestAllBlogsPageChrome(LiveServerTestCase):
 
         print('All testing data was cleared')
 
-    def test_posts_all_page_title(self):
+    def test_main_page_title(self):
         """Test that blogs page title is correct"""
 
         # Load the main page. In this case the home page of Blog.
