@@ -15,16 +15,23 @@ class MainPage(BasePage):
     def is_title_matches(self):
         """Verifies that the hardcoded text "React App" appears in page title"""
 
-        title_text = "React App"
+        expected_title = "React App"
 
-        return title_text == self.driver.title
+        return expected_title == self.driver.title
+
+    def is_header_matches(self):
+        """Triggers the navigation and checks URL (with hardcoded text)"""
+
+        element = self.driver.find_element(*MainPageLocators.MAIN_HEADER)
+        expected_header = 'Simple Django and React Blog with Testing Automation'
+
+        return expected_header == element.text
 
     def click_navigation_button(self):
         """Triggers the navigation and checks URL (with hardcoded text)"""
 
-        element = self.driver.find_element(*MainPageLocators.GO_BUTTON)
+        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_ABOUT)
         element.click()
-
         page_url = 'http://localhost:3000/about'
 
         return page_url == self.driver.current_url
