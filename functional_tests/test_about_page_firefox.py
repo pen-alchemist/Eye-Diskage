@@ -31,7 +31,7 @@ class TestAboutPageFirefox(LiveServerTestCase):
 
         self.driver = webdriver.Firefox(service=service, options=options)
         self.driver.maximize_window()
-        self.driver.get('http://localhost:3000/')
+        self.driver.get('http://localhost:3000/about')
 
     def tearDown(self):
         """Testing teardown. Driver quit (browser quit)"""
@@ -91,21 +91,12 @@ class TestAboutPageFirefox(LiveServerTestCase):
             'About Page SUB Header doesn\'t match.'
         )
 
-    def test_about_page_no_posts_message(self):
-        """Test that About Page no posts message text is correct"""
+    def test_return_button_redirect(self):
+        """Test that return button is redirecting to the Main Page"""
 
         about_page = page.AboutPage(self.driver)
         self.assertTrue(
-            about_page.is_no_posts_message_matches(),
-            'About Page "No Posts Message" doesn\'t match.'
-        )
-
-    def test_previous_button_disabled(self):
-        """Test that previous button is disabled on About Page"""
-
-        about_page = page.AboutPage(self.driver)
-        self.assertFalse(
-            about_page.disabled_page_return_button(),
+            about_page.redirect_page_return_button(),
             'Return button is not enabled on About Page.'
         )
 

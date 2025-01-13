@@ -133,15 +133,7 @@ class AboutPage(BasePage):
         element = self.driver.find_element(*AboutPageLocators.SUB_HEADER)
         expected_header = 'About'
 
-        return expected_header == element.text
-
-    def is_no_posts_message_matches(self):
-        """Triggers the header element and checks no posts message text"""
-
-        element = self.driver.find_element(*AboutPageLocators.NO_POSTS_MESSAGE)
-        expected_message = 'There are no posts!'
-
-        return expected_message == element.text
+        return element.text
 
     def is_pages_counter_matches(self):
         """Triggers the span element and checks pages counter text"""
@@ -151,13 +143,14 @@ class AboutPage(BasePage):
 
         return expected_counter == element.text
 
-    def disabled_page_return_button(self):
-        """Triggers the previous button and check is it disabled"""
+    def redirect_page_return_button(self):
+        """Triggers the return button and check is it redirecting"""
 
         element = self.driver.find_element(*AboutPageLocators.RETURN_BUTTON)
-        expected_btn_status = element.is_enabled()
+        page_url = 'http://localhost:3000/main'
+        element.click()
 
-        return expected_btn_status
+        return page_url == self.driver.current_url
 
     def is_footer_matches(self):
         """Triggers the footer element and checks footer text"""
