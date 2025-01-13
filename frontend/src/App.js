@@ -33,7 +33,7 @@ function App() {
             <Route path="/main" element={<Main authStatus={authStatus} />} />
             <Route path="/blog/post/:slug" element={<ReadPost authStatus={authStatus} />} />
             <Route path="/about" element={<About authStatus={authStatus} />} />
-            <Route path="/" element={<Navigate replace to="/blog" />} />
+            <Route path="/" element={<Navigate replace to="/main" />} />
         </Routes>
     </Router>
   );
