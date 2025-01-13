@@ -58,7 +58,7 @@ const fetchData = async () => {
 
         <p>
         <div className="pagination">
-            <a href="/blog" target="_blank" target="_self">
+            <a href="/main" target="_blank" target="_self">
                 <button className="nav-button_pages">
                     <i className="button-icon bi-arrow-left"></i>
                     <span>Return to Blog</span>
