@@ -99,7 +99,7 @@ const fetchData = async (page = 1) => {
             <i className="button-icon bi-arrow-left"></i>
             <span>Previous</span>
           </button>
-          <span>Page {data.current} of {data.pages_count}</span>
+          <span id="pages-counter">Page {data.current} of {data.pages_count}</span>
           <button className="nav-button_pages" onClick={() => handlePageChange(data.current + 1)} disabled={!data.is_next}>
             <span>Next</span>
             <i className="button-icon bi-arrow-right"></i>

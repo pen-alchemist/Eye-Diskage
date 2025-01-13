@@ -52,9 +52,17 @@ class MainPage(BasePage):
         return expected_header == element.text
 
     def is_no_posts_message_matches(self):
-        """Triggers the navigation and checks sub header text"""
+        """Triggers the header element and checks no posts message text"""
 
         element = self.driver.find_element(*MainPageLocators.NO_POSTS_MESSAGE)
-        expected_header = 'There are no posts!'
+        expected_message = 'There are no posts!'
 
-        return expected_header == element.text
+        return expected_message == element.text
+
+    def is_pages_counter_matches(self):
+        """Triggers the span element and checks pages counter text"""
+
+        element = self.driver.find_element(*MainPageLocators.PAGES_COUNTER)
+        expected_counter = 'Page 1 of 1'
+
+        return expected_counter == element.text

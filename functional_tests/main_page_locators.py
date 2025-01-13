@@ -9,3 +9,4 @@ class MainPageLocators(object):
     MAIN_HEADER = (By.ID, 'main-header2')
     SUB_HEADER = (By.TAG_NAME, 'h1')
     NO_POSTS_MESSAGE = (By.CLASS_NAME, 'no-posts')
+    PAGES_COUNTER = (By.ID, 'pages-counter')

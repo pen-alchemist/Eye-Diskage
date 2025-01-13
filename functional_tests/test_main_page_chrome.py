@@ -45,7 +45,7 @@ class TestMainPageChrome(LiveServerTestCase):
         print('All testing data was cleared')
 
     def test_main_page_title(self):
-        """Test that blogs page title is correct"""
+        """Test that Main Page title is correct"""
 
         main_page = page.MainPage(self.driver)
         self.assertTrue(
@@ -62,7 +62,7 @@ class TestMainPageChrome(LiveServerTestCase):
         )
 
     def test_main_page_header(self):
-        """Test that blogs page main header is correct"""
+        """Test that Main Page main header is correct"""
 
         main_page = page.MainPage(self.driver)
         self.assertTrue(
@@ -80,7 +80,7 @@ class TestMainPageChrome(LiveServerTestCase):
         )
 
     def test_main_page_sub_header(self):
-        """Test that blogs page sub header is correct"""
+        """Test that Main Page sub header is correct"""
 
         main_page = page.MainPage(self.driver)
         self.assertTrue(
@@ -89,10 +89,19 @@ class TestMainPageChrome(LiveServerTestCase):
         )
 
     def test_main_page_no_posts_message(self):
-        """Test that blogs page sub header is correct"""
+        """Test that Main Page no posts message text is correct"""
 
         main_page = page.MainPage(self.driver)
         self.assertTrue(
             main_page.is_no_posts_message_matches(),
             'Main Page "No Posts Message" doesn\'t match.'
+        )
+
+    def test_main_pages_counter(self):
+        """Test that Main Page pages counter text is correct"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertTrue(
+            main_page.is_pages_counter_matches(),
+            'Main Page Pages Counter doesn\'t match.'
         )
