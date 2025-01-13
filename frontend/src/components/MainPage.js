@@ -56,10 +56,10 @@ const fetchData = async (page = 1) => {
     <div className="home-container">
       <header className="header">
             <img src={logo} />
-            <h2> Simple Django and React Blog with Testing Automation  </h2>
+            <h2 id="main-header2"> Simple Django and React Blog with Testing Automation  </h2>
         <nav>
-            <button className="nav-button_pages"><Link to="/main">Blog</Link></button>
-            <button className="nav-button_pages"><Link to="/about">About</Link></button>
+            <button id="nav-button-blog" className="nav-button_pages"><Link to="/main">Blog</Link></button>
+            <button id="nav-button-about" className="nav-button_pages"><Link to="/about">About</Link></button>
         </nav>
       </header>
 

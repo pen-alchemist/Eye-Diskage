@@ -51,3 +51,11 @@ class TestMainPageChrome(LiveServerTestCase):
         main_page = page.MainPage(self.driver)
         # Checks if the word "React App" is in title
         self.assertTrue(main_page.is_title_matches(), 'React App title doesn\'t match.')
+
+    def test_navigate_button_title(self):
+        """Test that URL is correct after clicking on navigation button"""
+
+        # Load the main page. In this case the home page of Blog.
+        main_page = page.MainPage(self.driver)
+        # Checks is URL correct after navigating (clicking on "About" button)
+        self.assertTrue(main_page.click_navigation_button(), 'URL does not match.')
