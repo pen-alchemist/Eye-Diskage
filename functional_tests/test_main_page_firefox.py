@@ -90,3 +90,12 @@ class TestMainPageFirefox(LiveServerTestCase):
             main_page.is_sub_header_matches(),
             'Main Page SUB Header doesn\'t match.'
         )
+
+    def test_main_page_no_posts_message(self):
+        """Test that blogs page sub header is correct"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertTrue(
+            main_page.is_no_posts_message_matches(),
+            'Main Page "No Posts Message" doesn\'t match.'
+        )

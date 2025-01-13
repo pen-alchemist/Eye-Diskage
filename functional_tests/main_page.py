@@ -50,3 +50,11 @@ class MainPage(BasePage):
         expected_header = 'All Blogs'
 
         return expected_header == element.text
+
+    def is_no_posts_message_matches(self):
+        """Triggers the navigation and checks sub header text"""
+
+        element = self.driver.find_element(*MainPageLocators.NO_POSTS_MESSAGE)
+        expected_header = 'There are no posts!'
+
+        return expected_header == element.text
