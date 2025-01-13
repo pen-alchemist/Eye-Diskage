@@ -19,6 +19,13 @@ class MainPage(BasePage):
 
         return expected_title == self.driver.title
 
+    def is_url_matches(self):
+        """Verifies that the URL is correct on Main Page"""
+
+        page_url = 'http://localhost:3000/main'
+
+        return page_url == self.driver.current_url
+
     def is_header_matches(self):
         """Triggers the navigation and checks URL (with hardcoded text)"""
 
@@ -28,7 +35,7 @@ class MainPage(BasePage):
         return expected_header == element.text
 
     def click_navigation_button(self):
-        """Triggers the navigation and checks URL (with hardcoded text)"""
+        """Triggers the navigation button and checks URL"""
 
         element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_ABOUT)
         element.click()

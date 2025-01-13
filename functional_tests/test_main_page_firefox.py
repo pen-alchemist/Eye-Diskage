@@ -55,6 +55,15 @@ class TestMainPageFirefox(LiveServerTestCase):
             main_page.is_title_matches(), 'React App title doesn\'t match.'
         )
 
+    def test_main_page_url(self):
+        """Test that URL is correct after opening Main Page"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertTrue(
+            main_page.is_url_matches(),
+            'URL does not match after opening Main Page.'
+        )
+
     def test_main_page_header(self):
         """Test that blogs page header is correct"""
 
@@ -63,10 +72,11 @@ class TestMainPageFirefox(LiveServerTestCase):
             main_page.is_header_matches(), 'Main Page Header doesn\'t match.'
         )
 
-    def test_navigate_button_title(self):
+    def test_navigate_button_click(self):
         """Test that URL is correct after clicking on navigation button"""
 
         main_page = page.MainPage(self.driver)
         self.assertTrue(
-            main_page.click_navigation_button(), 'URL does not match.'
+            main_page.click_navigation_button(),
+            'URL does not match after clicking navigation to About Page.'
         )
