@@ -26,8 +26,8 @@ class MainPage(BasePage):
 
         return page_url == self.driver.current_url
 
-    def is_header_matches(self):
-        """Triggers the navigation and checks URL (with hardcoded text)"""
+    def is_main_header_matches(self):
+        """Triggers the navigation and checks main header text"""
 
         element = self.driver.find_element(*MainPageLocators.MAIN_HEADER)
         expected_header = 'Simple Django and React Blog with Testing Automation'
@@ -42,3 +42,11 @@ class MainPage(BasePage):
         page_url = 'http://localhost:3000/about'
 
         return page_url == self.driver.current_url
+
+    def is_sub_header_matches(self):
+        """Triggers the navigation and checks sub header text"""
+
+        element = self.driver.find_element(*MainPageLocators.SUB_HEADER)
+        expected_header = 'All Blogs'
+
+        return expected_header == element.text

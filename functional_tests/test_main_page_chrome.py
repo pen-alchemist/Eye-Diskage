@@ -62,11 +62,12 @@ class TestMainPageChrome(LiveServerTestCase):
         )
 
     def test_main_page_header(self):
-        """Test that blogs page header is correct"""
+        """Test that blogs page main header is correct"""
 
         main_page = page.MainPage(self.driver)
         self.assertTrue(
-            main_page.is_header_matches(), 'Main Page Header doesn\'t match.'
+            main_page.is_main_header_matches(),
+            'Main Page Header doesn\'t match.'
         )
 
     def test_navigate_button_click(self):
@@ -76,4 +77,13 @@ class TestMainPageChrome(LiveServerTestCase):
         self.assertTrue(
             main_page.click_navigation_button(),
             'URL does not match after clicking navigation to About Page.'
+        )
+
+    def test_main_page_sub_header(self):
+        """Test that blogs page sub header is correct"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertTrue(
+            main_page.is_sub_header_matches(),
+            'Main Page SUB Header doesn\'t match.'
         )
