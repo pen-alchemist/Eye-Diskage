@@ -106,20 +106,29 @@ class TestMainPageChrome(LiveServerTestCase):
             'Main Page Pages Counter doesn\'t match.'
         )
 
-    def test_previous_button_click(self):
+    def test_previous_button_disabled(self):
         """Test that previous button is disabled on Main Page"""
 
         main_page = page.MainPage(self.driver)
         self.assertFalse(
-            main_page.click_page_previous_button(),
+            main_page.disabled_page_previous_button(),
             'Previous button is not disabled on Main Page.'
         )
 
-    def test_next_button_click(self):
+    def test_next_button_disabled(self):
         """Test that next button is disabled on Main Page"""
 
         main_page = page.MainPage(self.driver)
         self.assertFalse(
-            main_page.click_page_next_button(),
-            'Previous button is not disabled on Main Page'
+            main_page.disabled_page_next_button(),
+            'Next button is not disabled on Main Page.'
+        )
+
+    def test_footer_text(self):
+        """Test that footer text is correct"""
+
+        main_page = page.MainPage(self.driver)
+        self.assertTrue(
+            main_page.is_footer_matches(),
+            'Main Page Footer text doesn\'t match.'
         )

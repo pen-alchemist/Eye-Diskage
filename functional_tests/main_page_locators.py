@@ -12,3 +12,4 @@ class MainPageLocators(object):
     PAGES_COUNTER = (By.ID, 'pages-counter')
     PREVIOUS_BUTTON = (By.XPATH, '//button[span[text()=\'Previous\']]')
     NEXT_BUTTON = (By.XPATH, '//button[span[text()=\'Next\']]')
+    FOOTER_TEXT = (By.CLASS_NAME, 'footer')

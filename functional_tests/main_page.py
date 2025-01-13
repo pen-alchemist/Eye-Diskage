@@ -67,7 +67,7 @@ class MainPage(BasePage):
 
         return expected_counter == element.text
 
-    def click_page_previous_button(self):
+    def disabled_page_previous_button(self):
         """Triggers the previous button and check is it disabled"""
 
         element = self.driver.find_element(*MainPageLocators.PREVIOUS_BUTTON)
@@ -75,10 +75,18 @@ class MainPage(BasePage):
 
         return expected_btn_status
 
-    def click_page_next_button(self):
+    def disabled_page_next_button(self):
         """Triggers the next button and check is it disabled"""
 
         element = self.driver.find_element(*MainPageLocators.NEXT_BUTTON)
         expected_btn_status = element.is_enabled()
 
         return expected_btn_status
+
+    def is_footer_matches(self):
+        """Triggers the footer element and checks footer text"""
+
+        element = self.driver.find_element(*MainPageLocators.FOOTER_TEXT)
+        expected_footer = '© 2025 by Yehor Romanov @wwwinri aka @pen-alchemist'
+
+        return expected_footer == element.text
