@@ -15,7 +15,7 @@ from backend.views import post_read_view
 class TestPostReadEndpoint(TestCase):
 
     def setUp(self):
-        """Testing setup. Returns API factory object"""
+        """Testing setup. Returns Read Post API factory object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
@@ -50,7 +50,7 @@ class TestPostReadEndpoint(TestCase):
         print('All testing data was cleared')
 
     def test_post_read_response_status(self):
-        """Test that posts collection view returns 200 status code"""
+        """Test that posts collection endpoint returns 200 status code"""
 
         request = self.factory.get(self.url)
         response = post_read_view(request, self.random_slug)
@@ -58,7 +58,7 @@ class TestPostReadEndpoint(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_post_read_title_field(self):
-        """Test that posts collection view returns correct title"""
+        """Test that posts collection endpoint returns correct title"""
 
         request = self.factory.get(self.url)
         response = post_read_view(request, self.random_slug)
@@ -70,7 +70,7 @@ class TestPostReadEndpoint(TestCase):
         self.assertTrue(len(post_title) > 0)
 
     def test_post_read_content_full_field(self):
-        """Test that posts collection view returns correct short content"""
+        """Test that posts collection endpoint returns correct short content"""
 
         request = self.factory.get(self.url)
         response = post_read_view(request, self.random_slug)
@@ -82,7 +82,7 @@ class TestPostReadEndpoint(TestCase):
         self.assertTrue(len(post_content_full) <= 4000)
 
     def test_post_read_date_field(self):
-        """Test that posts collection view returns correct date"""
+        """Test that posts collection endpoint returns correct date"""
 
         request = self.factory.get(self.url)
         response = post_read_view(request, self.random_slug)
@@ -93,7 +93,7 @@ class TestPostReadEndpoint(TestCase):
         self.assertEqual(date_actual, date_expected)
 
     def test_post_read_null_image_field(self):
-        """Test that posts collection view returns correct null image"""
+        """Test that posts collection endpoint returns correct null image"""
 
         request = self.factory.get(self.url)
         response = post_read_view(request, self.random_slug)
