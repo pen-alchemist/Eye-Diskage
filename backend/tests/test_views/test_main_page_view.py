@@ -32,8 +32,9 @@ class TestMainPageView(TestCase):
         )
 
         self.response = self.client.get(reverse('blog-all'))
+        self.json_data = json.loads(self.response.content)
 
-        return self.response
+        return self.json_data
 
     def tearDown(self):
         """Testing setup. Deleting blog post object"""
@@ -46,7 +47,7 @@ class TestMainPageView(TestCase):
         print(f'Memory usage: {mb_memory} MB')
 
         self.blog_post.delete()
-        del self.response
+        del self.json_data
         print('All testing data was cleared')
 
     def test_main_view_response_status(self):
@@ -57,8 +58,7 @@ class TestMainPageView(TestCase):
     def test_main_page_title_field_value(self):
         """Test that posts collection view returns correct title value"""
 
-        json_data = json.loads(self.response.content)
-        post_title = json_data['posts'][0]['post_title']
+        post_title = self.json_data['posts'][0]['post_title']
 
         self.assertEqual(post_title, self.random_title)
 
@@ -66,8 +66,7 @@ class TestMainPageView(TestCase):
         """Test that posts collection view returns
         correct title len smaller or equal 200"""
 
-        json_data = json.loads(self.response.content)
-        post_title = json_data['posts'][0]['post_title']
+        post_title = self.json_data['posts'][0]['post_title']
 
         self.assertTrue(len(post_title) <= 200)
 
@@ -75,16 +74,14 @@ class TestMainPageView(TestCase):
         """Test that posts collection view
         returns correct title len bigger than 0"""
 
-        json_data = json.loads(self.response.content)
-        post_title = json_data['posts'][0]['post_title']
+        post_title = self.json_data['posts'][0]['post_title']
 
         self.assertTrue(len(post_title) > 0)
 
     def test_main_page_content_short_field_value(self):
         """Test that posts collection view returns short content value"""
 
-        json_data = json.loads(self.response.content)
-        post_content_actual = json_data['posts'][0]['post_content_short']
+        post_content_actual = self.json_data['posts'][0]['post_content_short']
         post_content_expected = f'{self.random_content[0:400]}...'
 
         self.assertEqual(post_content_actual, post_content_expected)
@@ -92,8 +89,7 @@ class TestMainPageView(TestCase):
     def test_main_page_content_short_field_not_full(self):
         """Test that posts collection view returns shorted content"""
 
-        json_data = json.loads(self.response.content)
-        post_content_actual = json_data['posts'][0]['post_content_short']
+        post_content_actual = self.json_data['posts'][0]['post_content_short']
 
         self.assertNotEqual(post_content_actual, self.random_content)
 
@@ -101,16 +97,14 @@ class TestMainPageView(TestCase):
         """Test that posts collection view
         returns content with len equal 403"""
 
-        json_data = json.loads(self.response.content)
-        post_content_actual = json_data['posts'][0]['post_content_short']
+        post_content_actual = self.json_data['posts'][0]['post_content_short']
 
         self.assertEqual(len(post_content_actual), 403)
 
     def test_main_page_slug_field_value(self):
         """Test that posts collection view returns correct slug value"""
 
-        json_data = json.loads(self.response.content)
-        post_slug = json_data['posts'][0]['post_slug']
+        post_slug = self.json_data['posts'][0]['post_slug']
 
         self.assertEqual(post_slug, self.random_slug)
 
@@ -118,8 +112,7 @@ class TestMainPageView(TestCase):
         """Test that posts collection view
         returns slug with len smaller or equal 30"""
 
-        json_data = json.loads(self.response.content)
-        post_slug = json_data['posts'][0]['post_slug']
+        post_slug = self.json_data['posts'][0]['post_slug']
 
         self.assertTrue(len(post_slug) <= 30)
 
@@ -127,16 +120,14 @@ class TestMainPageView(TestCase):
         """Test that posts collection view
         returns slug with len bigger than 0"""
 
-        json_data = json.loads(self.response.content)
-        post_slug = json_data['posts'][0]['post_slug']
+        post_slug = self.json_data['posts'][0]['post_slug']
 
         self.assertTrue(len(post_slug) > 0)
 
     def test_main_page_date_field(self):
         """Test that posts collection view returns correct date"""
 
-        json_data = json.loads(self.response.content)
-        date_actual = json_data['posts'][0]['post_date']
+        date_actual = self.json_data['posts'][0]['post_date']
         date_expected = datetime.datetime.now().strftime('%Y-%m-%d')
 
         self.assertEqual(date_actual, date_expected)
@@ -144,48 +135,41 @@ class TestMainPageView(TestCase):
     def test_main_page_null_image_field(self):
         """Test that posts collection view returns correct null image"""
 
-        json_data = json.loads(self.response.content)
-        post_image = json_data['posts'][0]['post_image']
+        post_image = self.json_data['posts'][0]['post_image']
 
         self.assertEqual(post_image, '""')
 
     def test_main_page_no_next_page_field(self):
         """Test that posts collection view returns no next page (false)"""
 
-        json_data = json.loads(self.response.content)
-        is_next = json_data['is_next']
+        is_next = self.json_data['is_next']
 
         self.assertFalse(is_next)
 
     def test_main_page_no_previous_page_field(self):
         """Test that posts collection view returns no previous page (false)"""
 
-        json_data = json.loads(self.response.content)
-        is_previous = json_data['is_previous']
+        is_previous = self.json_data['is_previous']
 
         self.assertFalse(is_previous)
 
     def test_main_page_number_of_current_page_field(self):
         """Test that posts collection view returns current page number"""
 
-        json_data = json.loads(self.response.content)
-        current = json_data['current']
+        current = self.json_data['current']
 
         self.assertEqual(current, 1)
 
     def test_main_page_number_of_pages_count_field(self):
         """Test that posts collection view returns number of pages"""
 
-        json_data = json.loads(self.response.content)
-        pages_count = json_data['pages_count']
+        pages_count = self.json_data['pages_count']
 
         self.assertEqual(pages_count, 1)
 
     def test_main_page_number_of_posts_count_field(self):
         """Test that posts collection view returns number of posts"""
 
-        json_data = json.loads(self.response.content)
-        posts_count = json_data['posts_count']
+        posts_count = self.json_data['posts_count']
 
         self.assertEqual(posts_count, 1)
-
