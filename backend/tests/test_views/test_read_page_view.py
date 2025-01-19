@@ -24,7 +24,7 @@ class TestPostReadView(TestCase):
         self.random_content = make_random_string(4000)
         self.client = Client()
 
-        # Creating Blog Post object
+        # Creating Blog Post Object in database
         self.blog_post = BlogPost.objects.create(
             post_title=self.random_title,
             post_slug=self.random_slug,
@@ -51,6 +51,7 @@ class TestPostReadView(TestCase):
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
 
+        self.blog_post.delete()
         del self.response
         print('All testing data was cleared')
 
@@ -59,23 +60,48 @@ class TestPostReadView(TestCase):
 
         self.assertEqual(self.response.status_code, 200)
 
-    def test_post_read_title_field(self):
-        """Test that posts collection view returns correct title"""
+    def test_main_page_title_field_value(self):
+        """Test that read post view returns correct title value"""
 
         json_data = json.loads(self.response.content)
-        post_title = json_data['post_title']
+        post_title = json_data['posts'][0]['post_title']
 
         self.assertEqual(post_title, self.random_title)
+
+    def test_main_page_title_field_len_max(self):
+        """Test that read post view returns
+        correct title len smaller or equal 200"""
+
+        json_data = json.loads(self.response.content)
+        post_title = json_data['posts'][0]['post_title']
+
         self.assertTrue(len(post_title) <= 200)
+
+    def test_main_page_title_field_len_min(self):
+        """Test that read post view returns
+        correct title len bigger than 0"""
+
+        json_data = json.loads(self.response.content)
+        post_title = json_data['posts'][0]['post_title']
+
         self.assertTrue(len(post_title) > 0)
 
-    def test_post_read_content_full_field(self):
-        """Test that posts collection view returns correct short content"""
+    def test_post_read_content_full_field_value(self):
+        """Test that read post view
+        returns correct short content value"""
 
         json_data = json.loads(self.response.content)
         post_content_full = json_data['post_content']
 
         self.assertEqual(post_content_full, self.random_content)
+
+    def test_post_read_content_full_field_max_len(self):
+        """Test that read post view returns
+        correct short content smaller or equal 4000"""
+
+        json_data = json.loads(self.response.content)
+        post_content_full = json_data['post_content']
+
         self.assertTrue(len(post_content_full) <= 4000)
 
     def test_post_read_date_field(self):

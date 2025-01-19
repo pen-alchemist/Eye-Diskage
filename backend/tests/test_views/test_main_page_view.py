@@ -24,7 +24,7 @@ class TestMainPageView(TestCase):
         self.random_content = make_random_string(4000)
         self.client = Client()
 
-        # Creating Blog Post object
+        # Creating Blog Post Object in database
         self.blog_post = BlogPost.objects.create(
             post_title=self.random_title,
             post_slug=self.random_slug,
@@ -45,6 +45,7 @@ class TestMainPageView(TestCase):
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
 
+        self.blog_post.delete()
         del self.response
         print('All testing data was cleared')
 
@@ -53,36 +54,82 @@ class TestMainPageView(TestCase):
 
         self.assertEqual(self.response.status_code, 200)
 
-    def test_main_page_title_field(self):
-        """Test that posts collection view returns correct title"""
+    def test_main_page_title_field_value(self):
+        """Test that posts collection view returns correct title value"""
 
         json_data = json.loads(self.response.content)
         post_title = json_data['posts'][0]['post_title']
 
         self.assertEqual(post_title, self.random_title)
+
+    def test_main_page_title_field_len_max(self):
+        """Test that posts collection view returns
+        correct title len smaller or equal 200"""
+
+        json_data = json.loads(self.response.content)
+        post_title = json_data['posts'][0]['post_title']
+
         self.assertTrue(len(post_title) <= 200)
+
+    def test_main_page_title_field_len_min(self):
+        """Test that posts collection view
+        returns correct title len bigger than 0"""
+
+        json_data = json.loads(self.response.content)
+        post_title = json_data['posts'][0]['post_title']
+
         self.assertTrue(len(post_title) > 0)
 
-    def test_main_page_content_short_field(self):
-        """Test that posts collection view returns correct short content"""
+    def test_main_page_content_short_field_value(self):
+        """Test that posts collection view returns short content value"""
 
         json_data = json.loads(self.response.content)
         post_content_actual = json_data['posts'][0]['post_content_short']
         post_content_expected = f'{self.random_content[0:400]}...'
 
-
         self.assertEqual(post_content_actual, post_content_expected)
+
+    def test_main_page_content_short_field_not_full(self):
+        """Test that posts collection view returns shorted content"""
+
+        json_data = json.loads(self.response.content)
+        post_content_actual = json_data['posts'][0]['post_content_short']
+
         self.assertNotEqual(post_content_actual, self.random_content)
+
+    def test_main_page_content_short_field_len(self):
+        """Test that posts collection view
+        returns content with len equal 403"""
+
+        json_data = json.loads(self.response.content)
+        post_content_actual = json_data['posts'][0]['post_content_short']
+
         self.assertEqual(len(post_content_actual), 403)
 
-    def test_main_page_slug_field(self):
-        """Test that posts collection view returns correct slug"""
+    def test_main_page_slug_field_value(self):
+        """Test that posts collection view returns correct slug value"""
 
         json_data = json.loads(self.response.content)
         post_slug = json_data['posts'][0]['post_slug']
 
         self.assertEqual(post_slug, self.random_slug)
+
+    def test_main_page_slug_field_len_max(self):
+        """Test that posts collection view
+        returns slug with len smaller or equal 30"""
+
+        json_data = json.loads(self.response.content)
+        post_slug = json_data['posts'][0]['post_slug']
+
         self.assertTrue(len(post_slug) <= 30)
+
+    def test_main_page_slug_field_len_min(self):
+        """Test that posts collection view
+        returns slug with len bigger than 0"""
+
+        json_data = json.loads(self.response.content)
+        post_slug = json_data['posts'][0]['post_slug']
+
         self.assertTrue(len(post_slug) > 0)
 
     def test_main_page_date_field(self):

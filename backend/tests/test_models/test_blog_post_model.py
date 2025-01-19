@@ -20,7 +20,7 @@ class TestBlogPost(TestCase):
         self.random_slug = make_random_string(30)
         self.random_content = make_random_string(4000)
 
-        # Creating Blog Post object
+        # Creating Blog Post Object in database
         self.blog_post = BlogPost.objects.create(
             post_title=self.random_title,
             post_slug=self.random_slug,
@@ -39,7 +39,7 @@ class TestBlogPost(TestCase):
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
 
-        del self.blog_post
+        self.blog_post.delete()
         print('All testing data was cleared')
 
     def test_post_title_field(self):

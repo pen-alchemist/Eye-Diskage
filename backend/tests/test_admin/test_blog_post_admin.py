@@ -76,7 +76,7 @@ class TestBlogPostAdmin(TestCase):
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
 
-        del self.new_user
+        self.new_user.delete()
         del self.blog_model_admin
         print('All testing data was cleared')
 
