@@ -48,7 +48,8 @@ class FunctionalTestFirefox(StaticLiveServerTestCase):
         print('All testing data was cleared')
 
     def wait_for(self, fn):
-        """Docstring"""
+        """Average waiting maximum 10 until
+        success try or got error and time is left"""
 
         MAX_WAIT = 10
         start_time = time.time()
