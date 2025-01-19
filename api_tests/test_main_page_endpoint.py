@@ -25,16 +25,18 @@ class TestMainPageEndpoint(TestCase):
         self.random_content = make_random_string(4000)
         self.url = '/blog/api/blog/all/'
 
-        # Creating user
-        self.user = BlogPost.objects.create(
+        # Creating Blog Post Object in database
+        self.blog_post = BlogPost.objects.create(
             post_title=self.random_title,
             post_slug=self.random_slug,
             post_content=self.random_content
         )
 
         self.factory = APIRequestFactory()
+        self.request = self.factory.get(self.url)
+        self.response = main_page_view(self.request)
 
-        return self.factory
+        return self.response
 
     def tearDown(self):
         """Testing setup. Deleting blog post object"""
@@ -46,61 +48,97 @@ class TestMainPageEndpoint(TestCase):
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
 
-        del self.factory
+        self.blog_post.delete()
+        del self.response
         print('All testing data was cleared')
 
     def test_main_page_response_status(self):
         """Test that posts collection endpoint returns 200 status code"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
+        self.assertEqual(self.response.status_code, 200)
 
-        self.assertEqual(response.status_code, 200)
+    def test_main_page_title_field_value(self):
+        """Test that posts collection endpoint returns correct title value"""
 
-    def test_main_page_title_field(self):
-        """Test that posts collection endpoint returns correct title"""
-
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         post_title = json_data['posts'][0]['post_title']
 
         self.assertEqual(post_title, self.random_title)
+
+    def test_main_page_title_field_len_max(self):
+        """Test that posts collection endpoint
+        returns correct title len smaller or equal 200"""
+
+        json_data = json.loads(self.response.content)
+        post_title = json_data['posts'][0]['post_title']
+
         self.assertTrue(len(post_title) <= 200)
+
+    def test_main_page_title_field_len_min(self):
+        """Test that posts collection endpoint
+        returns correct title len bigger than 0"""
+
+        json_data = json.loads(self.response.content)
+        post_title = json_data['posts'][0]['post_title']
+
         self.assertTrue(len(post_title) > 0)
 
-    def test_main_page_content_short_field(self):
-        """Test that posts collection endpoint returns correct short content"""
+    def test_main_page_content_short_field_value(self):
+        """Test that posts collection endpoint returns short content value"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         post_content_actual = json_data['posts'][0]['post_content_short']
         post_content_expected = f'{self.random_content[0:400]}...'
 
-
         self.assertEqual(post_content_actual, post_content_expected)
+
+    def test_main_page_content_short_field_not_full(self):
+        """Test that posts collection endpoint returns shorted content"""
+
+        json_data = json.loads(self.response.content)
+        post_content_actual = json_data['posts'][0]['post_content_short']
+
         self.assertNotEqual(post_content_actual, self.random_content)
+
+    def test_main_page_content_short_field_len(self):
+        """Test that posts collection endpoint
+        returns content with len equal 403"""
+
+        json_data = json.loads(self.response.content)
+        post_content_actual = json_data['posts'][0]['post_content_short']
+
         self.assertEqual(len(post_content_actual), 403)
 
-    def test_main_page_slug_field(self):
-        """Test that posts collection endpoint returns correct slug"""
+    def test_main_page_slug_field_value(self):
+        """Test that posts collection endpoint returns correct slug value"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         post_slug = json_data['posts'][0]['post_slug']
 
         self.assertEqual(post_slug, self.random_slug)
+
+    def test_main_page_slug_field_len_max(self):
+        """Test that posts collection endpoint
+        returns slug with len smaller or equal 30"""
+
+        json_data = json.loads(self.response.content)
+        post_slug = json_data['posts'][0]['post_slug']
+
         self.assertTrue(len(post_slug) <= 30)
+
+    def test_main_page_slug_field_len_min(self):
+        """Test that posts collection endpoint
+        returns slug with len bigger than 0"""
+
+        json_data = json.loads(self.response.content)
+        post_slug = json_data['posts'][0]['post_slug']
+
         self.assertTrue(len(post_slug) > 0)
 
     def test_main_page_date_field(self):
         """Test that posts collection endpoint returns correct date"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         date_actual = json_data['posts'][0]['post_date']
         date_expected = datetime.datetime.now().strftime('%Y-%m-%d')
 
@@ -109,9 +147,7 @@ class TestMainPageEndpoint(TestCase):
     def test_main_page_null_image_field(self):
         """Test that posts collection endpoint returns correct null image"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         post_image = json_data['posts'][0]['post_image']
 
         self.assertEqual(post_image, '""')
@@ -119,9 +155,7 @@ class TestMainPageEndpoint(TestCase):
     def test_main_page_no_next_page_field(self):
         """Test that posts collection endpoint returns no next page (false)"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         is_next = json_data['is_next']
 
         self.assertFalse(is_next)
@@ -129,9 +163,7 @@ class TestMainPageEndpoint(TestCase):
     def test_main_page_no_previous_page_field(self):
         """Test that posts collection endpoint returns no previous page (false)"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         is_previous = json_data['is_previous']
 
         self.assertFalse(is_previous)
@@ -139,9 +171,7 @@ class TestMainPageEndpoint(TestCase):
     def test_main_page_number_of_current_page_field(self):
         """Test that posts collection endpoint returns current page number"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         current = json_data['current']
 
         self.assertEqual(current, 1)
@@ -149,9 +179,7 @@ class TestMainPageEndpoint(TestCase):
     def test_main_page_number_of_pages_count_field(self):
         """Test that posts collection endpoint returns number of pages"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         pages_count = json_data['pages_count']
 
         self.assertEqual(pages_count, 1)
@@ -159,9 +187,7 @@ class TestMainPageEndpoint(TestCase):
     def test_main_page_number_of_posts_count_field(self):
         """Test that posts collection endpoint returns number of posts"""
 
-        request = self.factory.get(self.url)
-        response = main_page_view(request)
-        json_data = json.loads(response.content)
+        json_data = json.loads(self.response.content)
         posts_count = json_data['posts_count']
 
         self.assertEqual(posts_count, 1)
