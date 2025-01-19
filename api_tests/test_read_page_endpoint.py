@@ -9,6 +9,7 @@ from rest_framework.test import APIRequestFactory
 
 from backend.models import BlogPost
 from backend.tests.config.config_make_string import make_random_string
+from backend.tests.config.config_make_string import random_string_no_special_char
 from backend.views import post_read_view
 
 
@@ -21,7 +22,7 @@ class TestPostReadEndpoint(TestCase):
         ContentType.objects.clear_cache()
 
         self.random_title = make_random_string(200)
-        self.random_slug = make_random_string(30)
+        self.random_slug = random_string_no_special_char(30)
         self.random_content = make_random_string(4000)
         self.url = f'/blog/api/blog/read/{self.random_slug}/'
 

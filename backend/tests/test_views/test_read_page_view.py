@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from backend.models import BlogPost
 from backend.tests.config.config_make_string import make_random_string
+from backend.tests.config.config_make_string import random_string_no_special_char
 
 
 class TestPostReadView(TestCase):
@@ -20,7 +21,7 @@ class TestPostReadView(TestCase):
         ContentType.objects.clear_cache()
 
         self.random_title = make_random_string(200)
-        self.random_slug = make_random_string(30)
+        self.random_slug = random_string_no_special_char(30)
         self.random_content = make_random_string(4000)
         self.client = Client()
 
