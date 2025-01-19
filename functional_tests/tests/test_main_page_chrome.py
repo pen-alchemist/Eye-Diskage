@@ -8,7 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
-from functional_tests import page
+from functional_tests.pages import main_page_object as page
 
 
 class TestMainPageChrome(LiveServerTestCase):

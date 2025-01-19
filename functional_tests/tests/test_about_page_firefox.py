@@ -5,28 +5,31 @@ from django.test.selenium import LiveServerTestCase
 from django.contrib.contenttypes.models import ContentType
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 
-from functional_tests import page
+from functional_tests.pages import about_page_object as page
 
 
-class TestAboutPageChrome(LiveServerTestCase):
+class TestAboutPageFirefox(LiveServerTestCase):
 
     def setUp(self):
         """Testing setup. Make the selenium setUp.
-        Returns chrome driver"""
+        Returns firefox driver"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
 
-        service = Service(f'{os.getcwd()}/chromedriver')
+        install_dir = "/snap/firefox/current/usr/lib/firefox"
+        driver_loc = os.path.join(install_dir, "geckodriver")
+        binary_loc = os.path.join(install_dir, "firefox")
+        service = Service(driver_loc)
 
         # Create Chrome Options object
         options = Options()
-        options.add_argument("--disable-extensions")
+        options.binary_location = binary_loc
 
-        self.driver = webdriver.Chrome(service=service, options=options)
+        self.driver = webdriver.Firefox(service=service, options=options)
         self.driver.maximize_window()
         self.driver.get('http://localhost:3000/about')
 
