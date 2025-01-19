@@ -61,7 +61,7 @@ class TestPostReadEndpoint(TestCase):
         """Test that read post endpoint returns correct title value"""
 
         json_data = json.loads(self.response.content)
-        post_title = json_data['posts'][0]['post_title']
+        post_title = json_data['post_title']
 
         self.assertEqual(post_title, self.random_title)
 
@@ -70,7 +70,7 @@ class TestPostReadEndpoint(TestCase):
         correct title len smaller or equal 200"""
 
         json_data = json.loads(self.response.content)
-        post_title = json_data['posts'][0]['post_title']
+        post_title = json_data['post_title']
 
         self.assertTrue(len(post_title) <= 200)
 
@@ -79,7 +79,7 @@ class TestPostReadEndpoint(TestCase):
         correct title len bigger than 0"""
 
         json_data = json.loads(self.response.content)
-        post_title = json_data['posts'][0]['post_title']
+        post_title = json_data['post_title']
 
         self.assertTrue(len(post_title) > 0)
 
