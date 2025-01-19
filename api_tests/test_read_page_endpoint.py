@@ -35,8 +35,9 @@ class TestPostReadEndpoint(TestCase):
         self.factory = APIRequestFactory()
         self.request = self.factory.get(self.url)
         self.response = post_read_view(self.request, self.random_slug)
+        self.json_data = json.loads(self.response.content)
 
-        return self.response
+        return self.json_data
 
     def tearDown(self):
         """Testing setup. Deleting blog post object"""
@@ -49,7 +50,7 @@ class TestPostReadEndpoint(TestCase):
         print(f'Memory usage: {mb_memory} MB')
 
         self.blog_post.delete()
-        del self.response
+        del self.json_data
         print('All testing data was cleared')
 
     def test_post_read_response_status(self):
@@ -60,8 +61,7 @@ class TestPostReadEndpoint(TestCase):
     def test_main_page_title_field_value(self):
         """Test that read post endpoint returns correct title value"""
 
-        json_data = json.loads(self.response.content)
-        post_title = json_data['post_title']
+        post_title = self.json_data['post_title']
 
         self.assertEqual(post_title, self.random_title)
 
@@ -69,8 +69,7 @@ class TestPostReadEndpoint(TestCase):
         """Test that read post endpoint returns
         correct title len smaller or equal 200"""
 
-        json_data = json.loads(self.response.content)
-        post_title = json_data['post_title']
+        post_title = self.json_data['post_title']
 
         self.assertTrue(len(post_title) <= 200)
 
@@ -78,8 +77,7 @@ class TestPostReadEndpoint(TestCase):
         """Test that read post endpoint returns
         correct title len bigger than 0"""
 
-        json_data = json.loads(self.response.content)
-        post_title = json_data['post_title']
+        post_title = self.json_data['post_title']
 
         self.assertTrue(len(post_title) > 0)
 
@@ -87,8 +85,7 @@ class TestPostReadEndpoint(TestCase):
         """Test that read post endpoint
         returns correct short content value"""
 
-        json_data = json.loads(self.response.content)
-        post_content_full = json_data['post_content']
+        post_content_full = self.json_data['post_content']
 
         self.assertEqual(post_content_full, self.random_content)
 
@@ -96,16 +93,14 @@ class TestPostReadEndpoint(TestCase):
         """Test that read post endpoint returns
         correct short content smaller or equal 4000"""
 
-        json_data = json.loads(self.response.content)
-        post_content_full = json_data['post_content']
+        post_content_full = self.json_data['post_content']
 
         self.assertTrue(len(post_content_full) <= 4000)
 
     def test_post_read_date_field(self):
         """Test that read post endpoint returns correct date"""
 
-        json_data = json.loads(self.response.content)
-        date_actual = json_data['post_date']
+        date_actual = self.json_data['post_date']
         date_expected = datetime.datetime.now().strftime('%Y-%m-%d')
 
         self.assertEqual(date_actual, date_expected)
@@ -113,7 +108,6 @@ class TestPostReadEndpoint(TestCase):
     def test_post_read_null_image_field(self):
         """Test that read post endpoint returns correct null image"""
 
-        json_data = json.loads(self.response.content)
-        post_image = json_data['post_image']
+        post_image = self.json_data['post_image']
 
         self.assertEqual(post_image, '""')
