@@ -10,6 +10,8 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from selenium.common import WebDriverException
 
+from test_logs.setup_test_logger import logger
+
 
 class FunctionalTestFirefox(StaticLiveServerTestCase):
 
@@ -42,12 +44,14 @@ class FunctionalTestFirefox(StaticLiveServerTestCase):
 
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
+        logger.info(f'Memory usage: {mb_memory} MB')
 
         self.driver.quit()
 
         print('All testing data was cleared')
 
-    def wait_for(self, fn):
+    @staticmethod
+    def wait_for(fn):
         """Average waiting maximum 10 until
         success try or got error and time is left"""
 
@@ -59,5 +63,8 @@ class FunctionalTestFirefox(StaticLiveServerTestCase):
                 return fn()
             except (AssertionError, WebDriverException) as error:
                 if time.time() - start_time > MAX_WAIT:
+                    logger.error(
+                        f'ERROR (WAITING CAUGHT ERROR): {error}'
+                    )
                     raise error
                 time.sleep(0.5)

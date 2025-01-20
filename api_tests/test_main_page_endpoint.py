@@ -10,6 +10,7 @@ from rest_framework.test import APIRequestFactory
 from backend.models import BlogPost
 from backend.tests.config.config_make_string import make_random_string
 from backend.views import main_page_view
+from test_logs.setup_test_logger import logger
 
 
 class TestMainPageEndpoint(TestCase):
@@ -48,6 +49,7 @@ class TestMainPageEndpoint(TestCase):
 
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
+        logger.info(f'Memory usage: {mb_memory} MB')
 
         self.blog_post.delete()
         del self.json_data

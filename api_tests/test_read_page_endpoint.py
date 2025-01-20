@@ -11,6 +11,7 @@ from backend.models import BlogPost
 from backend.tests.config.config_make_string import make_random_string
 from backend.tests.config.config_make_string import random_string_no_special_char
 from backend.views import post_read_view
+from test_logs.setup_test_logger import logger
 
 
 class TestPostReadEndpoint(TestCase):
@@ -49,6 +50,7 @@ class TestPostReadEndpoint(TestCase):
 
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
+        logger.info(f'Memory usage: {mb_memory} MB')
 
         self.blog_post.delete()
         del self.json_data

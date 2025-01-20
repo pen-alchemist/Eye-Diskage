@@ -17,6 +17,7 @@ from backend.tests.config.config_user_random import make_random_first_name
 from backend.tests.config.config_user_random import make_random_last_name
 from backend.tests.config.config_user_random import make_random_email
 from backend.tests.config.config_user_random import make_random_password
+from test_logs.setup_test_logger import logger
 
 
 class TestBlogPostAdmin(TestCase):
@@ -75,6 +76,7 @@ class TestBlogPostAdmin(TestCase):
 
         mb_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000
         print(f'Memory usage: {mb_memory} MB')
+        logger.info(f'Memory usage: {mb_memory} MB')
 
         self.new_user.delete()
         del self.blog_model_admin
