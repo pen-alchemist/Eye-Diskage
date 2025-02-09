@@ -39,7 +39,7 @@ describe('Main Component', () => {
     axios.get.mockResolvedValue(mockPosts);
   });
 
-  test('renders header, navigation, and footer', async () => {
+  test('renders header text', async () => {
     render(
       <BrowserRouter>
         <Main authStatus={true} />
@@ -47,12 +47,39 @@ describe('Main Component', () => {
     );
 
     expect(screen.getByText('Simple Django and React Blog with Testing Automation')).toBeInTheDocument();
+  });
+
+  test('renders navigation blog button', async () => {
+    render(
+      <BrowserRouter>
+        <Main authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText('Blog')).toBeInTheDocument();
+  });
+
+  test('renders navigation about button', async () => {
+    render(
+      <BrowserRouter>
+        <Main authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText('About')).toBeInTheDocument();
+  });
+
+  test('renders footer text', async () => {
+    render(
+      <BrowserRouter>
+        <Main authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText(/© 2025 by Yehor Romanov/i)).toBeInTheDocument();
   });
 
-  test('fetches and displays blog posts', async () => {
+  test('renders fetches and displays blog post 1', async () => {
     render(
       <BrowserRouter>
         <Main authStatus={true} />
@@ -61,11 +88,22 @@ describe('Main Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test Post 1')).toBeInTheDocument();
+    });
+  });
+
+  test('renders fetches and displays blog post 2', async () => {
+    render(
+      <BrowserRouter>
+        <Main authStatus={true} />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
       expect(screen.getByText('Test Post 2')).toBeInTheDocument();
     });
   });
 
-  test('shows pagination and handles next page', async () => {
+  test('renders and shows pagination', async () => {
     render(
       <BrowserRouter>
         <Main authStatus={true} />
@@ -75,9 +113,27 @@ describe('Main Component', () => {
     await waitFor(() => {
       expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
     });
+  });
+
+  test('renders and handles next page disabled', async () => {
+    render(
+      <BrowserRouter>
+        <Main authStatus={true} />
+      </BrowserRouter>
+    );
 
     const nextButton = screen.getByText('Next');
     expect(nextButton).not.toBeDisabled();
+  });
+
+  test('renders and handles next page click', async () => {
+    render(
+      <BrowserRouter>
+        <Main authStatus={true} />
+      </BrowserRouter>
+    );
+
+    const nextButton = screen.getByText('Next');
 
     fireEvent.click(nextButton);
 
@@ -86,7 +142,7 @@ describe('Main Component', () => {
     });
   });
 
-  test('shows message when no posts exist', async () => {
+  test('renders and shows message when no posts exist', async () => {
     axios.get.mockResolvedValueOnce({
       data: {
         posts: [],
