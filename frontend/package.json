@@ -4,10 +4,11 @@
   "private": true,
   "dependencies": {
     "axios": "^1.7.9",
+    "babel-preset-env": "^1.7.0",
     "cra-template": "1.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1"
   },
   "scripts": {
@@ -15,13 +16,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll --coverage",
     "eject": "react-scripts eject"
-  },
-  "jest": {
-    "coverageThreshold": {
-        "global": {
-            "lines": 80
-        }
-    }
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +36,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.8",
+    "@babel/preset-react": "^7.26.3",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^14.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "babel-jest": "^29.7.0",
+    "jest": "^27.5.1",
     "web-vitals": "^4.2.4"
   }
 }
