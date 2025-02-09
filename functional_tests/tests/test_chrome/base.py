@@ -1,6 +1,8 @@
 import time
 import resource
 
+from datetime import datetime
+
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.contenttypes.models import ContentType
 
@@ -49,8 +51,7 @@ class FunctionalTestChrome(StaticLiveServerTestCase):
 
         print('All testing data was cleared')
 
-    @staticmethod
-    def wait_for(fn):
+    def wait_for(self, fn):
         """Average waiting maximum 10 until
         success try or got error and time is left"""
 
@@ -65,5 +66,10 @@ class FunctionalTestChrome(StaticLiveServerTestCase):
                     logger.error(
                         f'ERROR (WAITING CAUGHT ERROR): {error}'
                     )
+                    time_now = datetime.now()
+                    self.driver.save_screenshot(
+                        f'{BASE_DIR}/test_logs/test-failed-{time_now}.png'
+                    )
+
                     raise error
                 time.sleep(0.5)
