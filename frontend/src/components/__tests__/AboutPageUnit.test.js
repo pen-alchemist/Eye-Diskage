@@ -11,7 +11,7 @@ jest.mock('axios', () => ({
 }));
 
 describe('About Component', () => {
-  test('renders header, navigation, and footer', () => {
+  test('renders header text', () => {
     render(
       <BrowserRouter>
         <About authStatus={true} />
@@ -19,12 +19,39 @@ describe('About Component', () => {
     );
 
     expect(screen.getByText('Simple Django and React Blog with Testing Automation')).toBeInTheDocument();
+  });
+
+  test('renders navigation blog button', () => {
+    render(
+      <BrowserRouter>
+        <About authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByRole('button', { name: 'Blog' })).toBeInTheDocument();
+  });
+
+  test('renders navigation about button', () => {
+    render(
+      <BrowserRouter>
+        <About authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByRole('button', { name: 'About' })).toBeInTheDocument();
+  });
+
+  test('renders footer text', () => {
+    render(
+      <BrowserRouter>
+        <About authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText(/© 2025 by Yehor Romanov/i)).toBeInTheDocument();
   });
 
-  test('renders About section with contact information', () => {
+  test('renders About section heading in main', () => {
     render(
       <BrowserRouter>
         <About authStatus={true} />
@@ -34,9 +61,35 @@ describe('About Component', () => {
     // Find the "About" heading inside the main section to avoid conflicts
     const mainSection = screen.getByRole('main');
     expect(within(mainSection).getByRole('heading', { name: 'About' })).toBeInTheDocument();
+  });
+
+  test('renders About section with email information', () => {
+    render(
+      <BrowserRouter>
+        <About authStatus={true} />
+      </BrowserRouter>
+    );
 
     expect(screen.getByText('Feel free to contact me: yehor.romanov7@gmail.com')).toBeInTheDocument();
+  });
+
+  test('renders About section with github profile link', () => {
+    render(
+      <BrowserRouter>
+        <About authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText('Also My GitHub https://github.com/pen-alchemist')).toBeInTheDocument();
+  });
+
+  test('renders About section with github project source information', () => {
+    render(
+      <BrowserRouter>
+        <About authStatus={true} />
+      </BrowserRouter>
+    );
+
     expect(screen.getByText('Project Source: https://github.com/pen-alchemist/simple_django_react_blog')).toBeInTheDocument();
   });
 
