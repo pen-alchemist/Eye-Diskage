@@ -28,7 +28,7 @@
             <img src={logo} />
             <h2 id="main-header2"> Simple Django and React Blog with Testing Automation  </h2>
         <nav>
-            <button id="nav-button-blog" className="nav-button_pages"><Link to="/main">Blog</Link></button>
+            <button id="nav-button-blog" className="nav-button_pages"><Link to="/main">Main</Link></button>
             <button id="nav-button-about" className="nav-button_pages"><Link to="/about">About</Link></button>
         </nav>
       </header>

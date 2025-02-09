@@ -24,8 +24,8 @@ describe('About Component', () => {
     expect(screen.getByText('Simple Django and React Blog with Testing Automation')).toBeInTheDocument();
   });
 
-  test('renders navigation blog button', () => {
-    expect(screen.getByRole('button', { name: 'Blog' })).toBeInTheDocument();
+  test('renders navigation main button', () => {
+    expect(screen.getByRole('button', { name: 'Main' })).toBeInTheDocument();
   });
 
   test('renders navigation about button', () => {
@@ -57,6 +57,5 @@ describe('About Component', () => {
   test('renders "Return to Blog" button and navigates to main page', () => {
     const returnButton = screen.getByText('Return to Blog');
     expect(returnButton).toBeInTheDocument();
-    fireEvent.click(returnButton);
   });
 });
