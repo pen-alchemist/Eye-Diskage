@@ -15,26 +15,11 @@
     data: [],
   });
 
-const fetchData = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/colyte3/api/post/read/${slug}/`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-    setData({
-      data: response.data.data, // Access data from nested property
-    });
-  } catch (error) {
-  }
-};
-
     useEffect(() => {
-        fetchData();
-    }, [slug]);
+        },
+    );
 
     const handlePageChange = (newPage) => {
-        fetchData(newPage);
     };
 
   return (

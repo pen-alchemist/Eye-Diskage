@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Main from './components/MainPage';
 import ReadPost from './components/ReadPostPage';
-import About from './components/About';
+import About from './components/AboutPage';
 import Auth from './components/Auth';
 
 function App() {
