@@ -12,7 +12,7 @@ from test_logs.setup_test_logger import logger
 class TestBlogPost(TestCase):
 
     def setUp(self):
-        """Testing setup. Returns blog post object"""
+        """Testing setup. Returns eye_diskage post object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
@@ -31,7 +31,7 @@ class TestBlogPost(TestCase):
         return self.blog_post
 
     def tearDown(self):
-        """Testing teardown. Deleting blog post object"""
+        """Testing teardown. Deleting eye_diskage post object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()

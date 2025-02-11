@@ -1,82 +1,21 @@
-import json
-
-from django.core.paginator import Paginator
-from django.core.paginator import PageNotAnInteger
-from django.core.paginator import EmptyPage
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from django.core.management.utils import get_random_secret_key
 
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny
 
-from backend.models import BlogPost
-
 
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([AllowAny,])
-def main_page_view(request):
-    """Returns all Blog Posts with pagination (10 per page) using JSONResponse"""
+def generator_view(request):
+    """Returns randomly generated Django Secret Key using JSONResponse"""
 
-    posts_list = []
-
-    posts = BlogPost.objects.all()
-
-    for post in posts:
-        _title = getattr(post, 'post_title')
-        _slug = getattr(post, 'post_slug')
-        _content = getattr(post, 'post_content')
-        _date = getattr(post, 'created_date')
-        _img = getattr(post, 'post_image')
-        date_str = _date.strftime('%Y-%m-%d')
-        short_content = f'{_content[0:400]}...'
-
-        posts_list.append(
-            {
-                'post_title': _title,
-                'post_content_short': short_content,
-                'post_slug': _slug,
-                'post_date': date_str,
-                'post_image': json.dumps(str(_img)),
-            }
-        )
-
-    paginator = Paginator(posts_list, 10)
-    page = request.GET.get('page', 1)
-    try:
-        items_page = paginator.page(page)
-    except (PageNotAnInteger, EmptyPage) as page_e:
-        items_page = paginator.page(paginator.num_pages)
+    _secret_key = get_random_secret_key()
 
     response = {
-        'posts': list(items_page),
-        'is_next': items_page.has_next(),
-        'is_previous': items_page.has_previous(),
-        'current': items_page.number,
-        'pages_count': paginator.num_pages,
-        'posts_count': len(posts),
-    }
-
-    return JsonResponse(response)
-
-
-@csrf_exempt
-@api_view(['GET'])
-@permission_classes([AllowAny,])
-def post_read_view(request, slug):
-    """Returns 1 Blog Post (title, content, date, image) using JSONResponse"""
-
-    post = get_object_or_404(BlogPost, post_slug__exact=slug)
-    _date = getattr(post, 'created_date')
-    _img = getattr(post, 'post_image')
-    date_str = _date.strftime('%Y-%m-%d')
-
-    response = {
-        'post_title': getattr(post, 'post_title'),
-        'post_content': getattr(post, 'post_content'),
-        'post_date': date_str,
-        'post_image': json.dumps(str(_img)),
+        'key': _secret_key
     }
 
     return JsonResponse(response)

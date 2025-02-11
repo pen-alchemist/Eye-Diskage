@@ -12,9 +12,8 @@ Class-based views
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    2. Add a URL to urlpatterns:  path('eye_diskage/', include('eye_diskage.urls'))
 """
-from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
@@ -22,16 +21,7 @@ from django.conf.urls.static import static
 from backend import urls
 
 
-admin.site.site_header = "Login to Simple Blog"
-admin.site.site_title = "Simple Blog Admin Portal"
-admin.site.index_title = "Welcome to Simple Blog Admin Portal"
-
-
 urlpatterns = [
-    path(
-        'admin/',
-        admin.site.urls
-    ),
     path('api/', include(urls)),
 ]
 

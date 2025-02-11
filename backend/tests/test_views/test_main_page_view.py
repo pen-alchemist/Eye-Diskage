@@ -32,13 +32,13 @@ class TestMainPageView(TestCase):
             post_content=self.random_content
         )
 
-        self.response = self.client.get(reverse('blog-all'))
+        self.response = self.client.get(reverse('eye_diskage-all'))
         self.json_data = json.loads(self.response.content)
 
         return self.json_data
 
     def tearDown(self):
-        """Testing setup. Deleting blog post object"""
+        """Testing setup. Deleting eye_diskage post object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()

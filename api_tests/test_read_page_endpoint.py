@@ -25,7 +25,7 @@ class TestPostReadEndpoint(TestCase):
         self.random_title = make_random_string(200)
         self.random_slug = random_string_no_special_char(30)
         self.random_content = make_random_string(4000)
-        self.url = f'/blog/api/blog/read/{self.random_slug}/'
+        self.url = f'/eye_diskage/api/eye_diskage/read/{self.random_slug}/'
 
         # Creating Blog Post Object in database
         self.blog_post = BlogPost.objects.create(
@@ -42,7 +42,7 @@ class TestPostReadEndpoint(TestCase):
         return self.json_data
 
     def tearDown(self):
-        """Testing setup. Deleting blog post object"""
+        """Testing setup. Deleting eye_diskage post object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()

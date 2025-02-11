@@ -12,7 +12,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from selenium.common import WebDriverException
 
-from blog.settings import BASE_DIR
+from eye_diskage.settings import BASE_DIR
 from test_logs.setup_test_logger import logger
 
 

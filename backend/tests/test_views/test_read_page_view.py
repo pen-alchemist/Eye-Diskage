@@ -34,7 +34,7 @@ class TestPostReadView(TestCase):
         )
 
         self.response = self.client.get(reverse(
-            'blog-reading',
+            'eye_diskage-reading',
             kwargs = {
                 'slug': self.blog_post.post_slug
                 }
@@ -45,7 +45,7 @@ class TestPostReadView(TestCase):
         return self.json_data
 
     def tearDown(self):
-        """Testing setup. Deleting blog post object"""
+        """Testing setup. Deleting eye_diskage post object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()

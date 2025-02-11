@@ -13,44 +13,26 @@
   const navigate = useNavigate();
     const location = useLocation();
     const [data, setData] = useState({
-        posts: [],
-        is_next: false,
-        is_previous: false,
-        current: 1,
-        pages_count: 1,
-        posts_count: 0
+        key: ''
     });
 
-const fetchData = async (page = 1) => {
+const fetchData = async () => {
         try {
-            const response = await axios.get(`${API_URL}/blog/api/blog/all/`, {
+            const response = await axios.get(`${API_URL}/api/eye_diskage/generate/`, {
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                params: {
-                    page: page
                 }
             });
-            const { posts, is_next, is_previous, current, pages_count, posts_count } = response.data;
+            const { key } = response.data;
             setData({
-                posts,
-                is_next,
-                is_previous,
-                current,
-                pages_count,
-                posts_count
+                key
             });
         } catch (error) {}
     };
 
     useEffect(() => {
-        const page = data.current_page
-        fetchData(page);
+        fetchData();
     }, [navigate, location]);
-
-    const handlePageChange = (newPage) => {
-        fetchData(newPage);
-    };
 
   return (
     <div className="home-container">
@@ -70,42 +52,10 @@ const fetchData = async (page = 1) => {
         <section className="posts">
             <div className="parent">
                 <div className="content">
-                    {data.posts_count > 0 ? (
-                        <>
-                        <ul className="posts-list">
-                            {data.posts.map(({ post_content_short, post_slug, post_date, post_image }) => (
-                            <>
-                                <Link to={`/blog/post/${post_slug}`} className="post-link">
-                                    <h3 className="post-short">{post_content_short}</h3>
-                                </Link>
-                                <h3 className="post-date">{post_date}</h3>
-                                <img className="post-image"
-                                    src={`${API_URL}${post_image}`}
-                                alt="Post Image about post" />
-                            </>
-                            ))}
-                        </ul>
-                        </>
-                    ) : (
-                        <h1><p className="no-posts">There are no posts!</p></h1>
-                    )}
+                    <h3 className="post-short">{data.key}</h3>
                 </div>
             </div>
         </section>
-
-        <p>
-        <div className="pagination">
-          <button className="nav-button_pages" onClick={() => handlePageChange(data.current - 1)} disabled={!data.is_previous}>
-            <i className="button-icon bi-arrow-left"></i>
-            <span>Previous</span>
-          </button>
-          <span id="pages-counter">Page {data.current} of {data.pages_count}</span>
-          <button className="nav-button_pages" onClick={() => handlePageChange(data.current + 1)} disabled={!data.is_next}>
-            <span>Next</span>
-            <i className="button-icon bi-arrow-right"></i>
-          </button>
-        </div>
-        </p>
       </main>
 
       <footer className="footer">

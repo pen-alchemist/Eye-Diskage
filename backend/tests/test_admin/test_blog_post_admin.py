@@ -23,7 +23,7 @@ from test_logs.setup_test_logger import logger
 class TestBlogPostAdmin(TestCase):
 
     def setUp(self):
-        """Testing setup. Returns blog post admin object"""
+        """Testing setup. Returns eye_diskage post admin object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
@@ -68,7 +68,7 @@ class TestBlogPostAdmin(TestCase):
         return self.blog_model_admin
 
     def tearDown(self):
-        """Testing teardown. Deleting user object and blog post admin object"""
+        """Testing teardown. Deleting user object and eye_diskage post admin object"""
 
         # Clear all cache at once for all cases
         ContentType.objects.clear_cache()
