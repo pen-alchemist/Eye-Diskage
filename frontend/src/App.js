@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Main from './components/MainPage';
-import ReadPost from './components/ReadPostPage';
-import About from './components/AboutPage';
 import Auth from './components/Auth';
 
 function App() {
@@ -31,8 +29,6 @@ function App() {
     <Router>
         <Routes>
             <Route path="/main" element={<Main authStatus={authStatus} />} />
-            <Route path="/blog/post/:slug" element={<ReadPost authStatus={authStatus} />} />
-            <Route path="/about" element={<About authStatus={authStatus} />} />
             <Route path="/" element={<Navigate replace to="/main" />} />
         </Routes>
     </Router>

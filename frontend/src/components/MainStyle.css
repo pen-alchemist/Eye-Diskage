@@ -15,7 +15,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.6rem 18rem;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -158,4 +158,48 @@ body {
   margin: 0;
   font-size: 0.9rem;
   color: #666;
+}
+
+
+.one {
+    position: absolute;
+    bottom: 283px;
+    left: 500px;
+    background: red;
+    border-radius: 30px;
+    color: #fff; /* Text color for .one */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: .8rem 1.5rem;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    text-transform: uppercase;
+    transition: all .3s ease;
+}
+
+.one:hover {
+    background: darkred;
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.zero {
+    position: absolute;
+    bottom: 5;
+    background: blue;
+    border-radius: 30px;
+    color: #fff; /* Text color for .zero */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: .8rem 2.6rem;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    text-transform: uppercase;
+    transition: all .3s ease;
+}
+
+.zero:hover {
+    background: darkblue;
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }

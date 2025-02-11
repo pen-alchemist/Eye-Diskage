@@ -6,7 +6,7 @@ const Auth = (Component) => {
         const { isAuthenticated } = props;
 
         if (!isAuthenticated) {
-            return <Navigate to="/blog" replace />;
+            return <Navigate to="/main" replace />;
         }
 
         return <Component {...props} />;

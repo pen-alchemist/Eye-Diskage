@@ -38,28 +38,22 @@ const fetchData = async () => {
     <div className="home-container">
       <header className="header">
             <img src={logo} />
-            <h2 id="main-header2"> Simple Django and React Blog with Testing Automation  </h2>
-        <nav>
-            <button id="nav-button-blog" className="nav-button_pages"><Link to="/main">Main</Link></button>
-            <button id="nav-button-about" className="nav-button_pages"><Link to="/about">About</Link></button>
-        </nav>
+            <h2 id="main-header2"> Eye-Diskage: Django Secret Key Generator Project </h2>
       </header>
 
       <main className="main">
         <section className="hero">
-            <h1>All Blogs</h1>
-        </section>
-        <section className="posts">
-            <div className="parent">
-                <div className="content">
-                    <h3 className="post-short">{data.key}</h3>
-                </div>
-            </div>
+            <h1>Your Secret Key</h1>
+            <h3 className="post-short">{data.key}</h3>
+            <nav>
+                <a className="one" href="/owl-ai">Refresh</a>
+                <a className="zero" href="/contact">Copy</a>
+            </nav>
         </section>
       </main>
 
       <footer className="footer">
-        <p>&copy; 2025 by Yehor Romanov @wwwinri aka @pen-alchemist </p>
+        <p>&copy; 2025 by Yehor Romanov aka @pen-alchemist </p>
       </footer>
     </div>
   );
