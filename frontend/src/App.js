@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Main from './components/MainPage';
+import MobileMain from './components/mobile/MobileMainPage'
 import Auth from './components/Auth';
 
 function App() {
@@ -27,10 +28,21 @@ function App() {
 
   return (
     <Router>
-        <Routes>
+        {isMobile ? (
+          <>
+          <Routes>
+            <Route path="/" element={<MobileMain authStatus={authStatus} />} />
+            <Route path="/main" element={<MobileMain authStatus={authStatus} />} />
+          </Routes>
+          </>
+        ) : (
+          <>
+          <Routes>
             <Route path="/" element={<Main authStatus={authStatus} />} />
             <Route path="/main" element={<Main authStatus={authStatus} />} />
-        </Routes>
+          </Routes>
+          </>
+        )}
     </Router>
   );
 }
