@@ -162,8 +162,8 @@ body {
 
 
 .one {
-    position: absolute;
-    bottom: 280px;
+    position: auto;
+    bottom: 50%;
     left: 500px;
     background: red;
     border-radius: 30px;
@@ -184,8 +184,8 @@ body {
 }
 
 .zero {
-    position: absolute;
-    bottom: 5;
+    position: auto;
+    bottom: 30%;
     background: blue;
     border-radius: 30px;
     color: #fff; /* Text color for .zero */
