@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny
 
 
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([AllowAny,])
 def generator_view(request):
     """Returns randomly generated Django Secret Key using JSONResponse"""

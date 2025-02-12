@@ -18,7 +18,7 @@
 
 const fetchData = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/eye_diskage/generate/`, {
+            const response = await axios.post(`${API_URL}/api/eye_diskage/generate/`, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
