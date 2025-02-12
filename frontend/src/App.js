@@ -28,8 +28,8 @@ function App() {
   return (
     <Router>
         <Routes>
+            <Route path="/" element={<Main authStatus={authStatus} />} />
             <Route path="/main" element={<Main authStatus={authStatus} />} />
-            <Route path="/" element={<Navigate replace to="/main" />} />
         </Routes>
     </Router>
   );
