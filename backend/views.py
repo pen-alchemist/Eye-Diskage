@@ -2,8 +2,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.core.management.utils import get_random_secret_key
 
-from django_ratelimit.decorators import ratelimit
-
 from rest_framework import status
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny
@@ -15,7 +13,6 @@ from backend.utils.caesar_cipher import caesar_cipher
 @csrf_protect
 @api_view(['POST'])
 @permission_classes([AllowAny,])
-@ratelimit(key='ip', rate='61/m', block=True)
 def generator_view(request):
     _secret_key = get_random_secret_key()
 
@@ -31,7 +28,6 @@ MAX_TEXT_SIZE = 10 * 1024 * 1024  # 10 MB
 @csrf_protect
 @api_view(['POST'])
 @permission_classes([AllowAny,])
-@ratelimit(key='ip', rate='53/m', block=True)
 def caesar_cipher_view(request):
     if request.method == 'POST':
         text = request.data.get('text', '')
