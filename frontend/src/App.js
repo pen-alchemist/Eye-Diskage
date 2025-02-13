@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Main from './components/MainPage';
 import CaesarCipherPage from './components/CaesarPage';
 import MobileMain from './components/mobile/MobileMainPage'
+import MobileCaesarCipherPage from './components/mobile/MobileCaesarPage'
 import Auth from './components/Auth';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MobileMain authStatus={authStatus} />} />
             <Route path="/main" element={<MobileMain authStatus={authStatus} />} />
+            <Route path="/caesar" element={<MobileCaesarCipherPage authStatus={authStatus} />} />
           </Routes>
           </>
         ) : (

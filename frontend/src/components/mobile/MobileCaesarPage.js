@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './CaesarStyle.css';
-import logo from './logo.png';
+import React, { useEffect, useState } from 'react';
+ import { Link, useNavigate, useLocation } from 'react-router-dom';
+import './MobileCaesarPage.css'; // Mobile-specific CSS
+import logo from '../logo.png'
+ import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
-const API_URL = process.env.REACT_APP_API_URL || ''; // Update with your Django backend URL
+const API_URL = process.env.REACT_APP_API_URL || '';
 
-const CaesarCipherPage = () => {
+function MobileCaesarCipherPage({ authStatus }) {
   const [text, setText] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
@@ -50,7 +51,7 @@ const CaesarCipherPage = () => {
     <div className="home-container">
       <header className="header">
         <img src={logo} alt="logo" />
-        <h2 id="main-header2"> Eye-Diskage: Caesar Cipher Encryption/Decryption </h2>
+        <h2 id="main-header2"> Eye-Diskage: Caesar Cipher Enc/Dec </h2>
       </header>
       <header className="header2">
         <nav className="header-nav">
@@ -123,4 +124,4 @@ const CaesarCipherPage = () => {
   );
 };
 
-export default CaesarCipherPage;
+export default MobileCaesarCipherPage;

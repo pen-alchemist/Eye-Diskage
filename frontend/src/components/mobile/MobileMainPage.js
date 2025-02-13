@@ -18,7 +18,7 @@ function MobileMain({ authStatus }) {
 
 const fetchData = async () => {
         try {
-            const response = await axios(`${API_URL}/api/eye_diskage/generate/`, {
+            const response = await axios(`${API_URL}/api/eye_diskage/django-ker-generate/`, {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
@@ -41,9 +41,15 @@ useEffect(() => {
 
   return (
     <div className="mobile-home-container">
-      <header className="mobile-header">
+      <header className="header">
             <img src={logo} />
-            <h2 id="mobile-main-header2"> Eye-Diskage: Django Secret Key Generator </h2>
+            <h2 id="main-header2"> Eye-Diskage: Django Secret Key Generator </h2>
+      </header>
+      <header className="header2">
+        <nav className="header-nav">
+          <a href="/main">Django Secret Key Gen</a>
+          <a href="/caesar">Caesar Cipher</a>
+        </nav>
       </header>
 
       <main className="mobile-main">
