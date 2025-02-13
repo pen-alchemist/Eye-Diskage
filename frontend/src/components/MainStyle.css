@@ -203,3 +203,78 @@ body {
     transform: scale(1.1);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+
+
+/* General styles for the header */
+.header2 {
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+  padding: 15px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure header stays on top */
+}
+
+/* Navigation container */
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* Space between links */
+}
+
+/* Link styles */
+.header-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Hover effect for links */
+.header-nav a:hover {
+  background: rgba(255, 255, 255, 0.1); /* Light background on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Underline animation on hover */
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.header-nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Active link style */
+.header-nav a.active {
+  background: rgba(255, 255, 255, 0.2); /* Slightly darker background for active link */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .header-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-nav a {
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+  }
+}

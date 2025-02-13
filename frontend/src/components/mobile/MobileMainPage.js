@@ -43,7 +43,7 @@ useEffect(() => {
     <div className="mobile-home-container">
       <header className="mobile-header">
             <img src={logo} />
-            <h2 id="mobile-main-header2"> Eye-Diskage: Django Secret Key Generator Project </h2>
+            <h2 id="mobile-main-header2"> Eye-Diskage: Django Secret Key Generator </h2>
       </header>
 
       <main className="mobile-main">
