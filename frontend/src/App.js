@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Main from './components/MainPage';
+import CaesarCipherPage from './components/CaesarPage';
 import MobileMain from './components/mobile/MobileMainPage'
 import Auth from './components/Auth';
 
@@ -40,6 +41,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Main authStatus={authStatus} />} />
             <Route path="/main" element={<Main authStatus={authStatus} />} />
+            <Route path="/caesar" element={<CaesarCipherPage authStatus={authStatus} />} />
           </Routes>
           </>
         )}
