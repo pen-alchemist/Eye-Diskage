@@ -39,7 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MobileMain authStatus={authStatus} />} />
             <Route path="/main" element={<MobileMain authStatus={authStatus} />} />
-            <Route path="/random/number" element={<MobileRandomNumberPage authStatus={authStatus} />} />
+            <Route path="/random/numbers" element={<MobileRandomNumberPage authStatus={authStatus} />} />
             <Route path="/caesar" element={<MobileCaesarCipherPage authStatus={authStatus} />} />
             <Route path="/vigenere" element={<MobileVigenereCipherPage authStatus={authStatus} />} />
           </Routes>
