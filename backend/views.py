@@ -29,6 +29,8 @@ def generator_view(request):
 
 
 MAX_TEXT_SIZE = 10 * 1024 * 1024  # 10 MB
+MAX_NUM_COUNT = 1000  # 1000 numbers can be generated
+
 
 @csrf_protect
 @api_view(['POST'])
@@ -95,6 +97,11 @@ def secure_random_numbers_view(request):
             max_value = int(max_value)
             count = int(count)
             unique = bool(unique)
+
+            if count > MAX_NUM_COUNT:
+                return Response({"error": "count cannot be more than 1000"}, status=status.HTTP_400_BAD_REQUEST)
+            elif count <= 0:
+                return Response({"error": "count cannot be less or equal 0"}, status=status.HTTP_400_BAD_REQUEST)
 
             # Generate random numbers using the updated function
             random_numbers = generate_random_numbers(min_value, max_value, count, unique)
