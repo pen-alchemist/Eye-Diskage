@@ -5,6 +5,7 @@ import CaesarCipherPage from './components/CaesarPage';
 import VigenereCipherPage from './components/VigenerePage';
 import MobileMain from './components/mobile/MobileMainPage'
 import MobileCaesarCipherPage from './components/mobile/MobileCaesarPage'
+import MobileVigenereCipherPage from './components/mobile/MobileVigenerePage'
 import Auth from './components/Auth';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/" element={<MobileMain authStatus={authStatus} />} />
             <Route path="/main" element={<MobileMain authStatus={authStatus} />} />
             <Route path="/caesar" element={<MobileCaesarCipherPage authStatus={authStatus} />} />
+            <Route path="/vigenere" element={<MobileVigenereCipherPage authStatus={authStatus} />} />
           </Routes>
           </>
         ) : (

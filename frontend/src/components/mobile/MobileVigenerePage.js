@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './VigenereStyle.css'; // Assuming you have a separate CSS file for styling
-import logo from './logo.png';
+import React, { useEffect, useState } from 'react';
+ import { Link, useNavigate, useLocation } from 'react-router-dom';
+import './MobileCaesarPage.css'; // Mobile-specific CSS
+import logo from '../logo.png'
+ import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
-const API_URL = process.env.REACT_APP_API_URL || ''; // Update with your Django backend URL
+const API_URL = process.env.REACT_APP_API_URL || '';
 
-const VigenereCipherPage = () => {
+function MobileVigenereCipherPage({ authStatus }) {
   const [text, setText] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
-  const [key, setKey] = useState(''); // Key for Vigenère cipher
+  const [shift, setShift] = useState(3); // Default shift value
   const [mode, setMode] = useState('encrypt'); // Default mode is 'encrypt'
 
   const handleEncrypt = async () => {
@@ -21,15 +22,10 @@ const VigenereCipherPage = () => {
       return;
     }
 
-    if (!key.trim()) {
-      setError('Please enter a key.');
-      return;
-    }
-
     try {
       const response = await axios.post(
-        `${API_URL}/api/eye_diskage/vigenere-cipher/`, // Update the endpoint
-        { text, key, mode },
+        `${API_URL}/api/eye_diskage/vigenere-cipher/`,
+        { text, shift, mode },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -128,4 +124,4 @@ const VigenereCipherPage = () => {
   );
 };
 
-export default VigenereCipherPage;
+export default MobileVigenereCipherPage;
