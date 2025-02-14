@@ -13,7 +13,7 @@ function MobileVigenereCipherPage({ authStatus }) {
   const [text, setText] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
-  const [shift, setShift] = useState(3); // Default shift value
+  const [key, setKey] = useState(''); // Key for Vigenère cipher
   const [mode, setMode] = useState('encrypt'); // Default mode is 'encrypt'
 
   const handleEncrypt = async () => {
@@ -22,10 +22,15 @@ function MobileVigenereCipherPage({ authStatus }) {
       return;
     }
 
+    if (!key.trim()) {
+      setError('Please enter a key.');
+      return;
+    }
+
     try {
       const response = await axios.post(
-        `${API_URL}/api/eye_diskage/vigenere-cipher/`,
-        { text, shift, mode },
+        `${API_URL}/api/eye_diskage/vigenere-cipher/`, // Update the endpoint
+        { text, key, mode },
         {
           headers: {
             'Content-Type': 'application/json',
