@@ -56,7 +56,7 @@ function MobileVigenereCipherPage({ authStatus }) {
     <div className="home-container">
       <header className="header">
         <img src={logo} alt="logo" />
-        <h2 id="main-header2"> Eye-Diskage: Vigenère Cipher Encryption/Decryption </h2>
+        <h2 id="main-header2"> Eye-Diskage: Vigenère Cipher Enc/Dec </h2>
       </header>
       <header className="header2">
         <nav className="header-nav">
