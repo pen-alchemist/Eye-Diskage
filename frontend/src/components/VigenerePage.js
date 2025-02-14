@@ -63,6 +63,7 @@ const VigenereCipherPage = () => {
           <a href="/random/numbers">Random Number Generator</a>
           <a href="/caesar">Caesar Cipher</a>
           <a href="/vigenere">Vigenère Cipher</a>
+          <a href="https://colyte.pro/" target="_blank">Colyte</a>
         </nav>
       </header>
 
