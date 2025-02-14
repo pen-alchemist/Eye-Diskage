@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CaesarStyle.css';
+import './VigenereStyle.css'; // Assuming you have a separate CSS file for styling
 import logo from './logo.png';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -8,11 +8,11 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 const API_URL = process.env.REACT_APP_API_URL || ''; // Update with your Django backend URL
 
-const CaesarCipherPage = () => {
+const VigenereCipherPage = () => {
   const [text, setText] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
-  const [shift, setShift] = useState(3); // Default shift value
+  const [key, setKey] = useState(''); // Key for Vigenère cipher
   const [mode, setMode] = useState('encrypt'); // Default mode is 'encrypt'
 
   const handleEncrypt = async () => {
@@ -21,10 +21,15 @@ const CaesarCipherPage = () => {
       return;
     }
 
+    if (!key.trim()) {
+      setError('Please enter a key.');
+      return;
+    }
+
     try {
       const response = await axios.post(
-        `${API_URL}/api/eye_diskage/caesar-cipher/`,
-        { text, shift, mode },
+        `${API_URL}/api/eye_diskage/vigenere-cipher/`, // Update the endpoint
+        { text, key, mode },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -50,7 +55,7 @@ const CaesarCipherPage = () => {
     <div className="home-container">
       <header className="header">
         <img src={logo} alt="logo" />
-        <h2 id="main-header2"> Eye-Diskage: Caesar Cipher Encryption/Decryption </h2>
+        <h2 id="main-header2"> Eye-Diskage: Vigenère Cipher Encryption/Decryption </h2>
       </header>
       <header className="header2">
         <nav className="header-nav">
@@ -74,14 +79,13 @@ const CaesarCipherPage = () => {
 
           <div className="controls">
             <label>
-              Shift:
-              <select value={shift} onChange={(e) => setShift(parseInt(e.target.value))}>
-                {[...Array(26).keys()].map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
+              Key:
+              <input
+                type="text"
+                value={key}
+                onChange={(e) => setKey(e.target.value)}
+                placeholder="Enter key..."
+              />
             </label>
 
             <label>
@@ -94,10 +98,10 @@ const CaesarCipherPage = () => {
           </div>
 
           <nav>
-            <button className="caesar-one" onClick={handleEncrypt}>
+            <button className="vigenere-one" onClick={handleEncrypt}>
               {mode === 'encrypt' ? 'Encrypt' : 'Decrypt'}
             </button>
-            <button className="caesar-zero" onClick={() => navigator.clipboard.writeText(result)}>
+            <button className="vigenere-zero" onClick={() => navigator.clipboard.writeText(result)}>
               Copy Result
             </button>
           </nav>
@@ -117,11 +121,11 @@ const CaesarCipherPage = () => {
         </section>
       </main>
 
-      <footer className="caesar-footer">
-        <p>&copy; 2025 by Yehor Romanov aka @pen-alchemist </p>
+      <footer className="vigenere-footer">
+        <p>&copy; 2025 by name aka name </p>
       </footer>
     </div>
   );
 };
 
-export default CaesarCipherPage;
+export default VigenereCipherPage;

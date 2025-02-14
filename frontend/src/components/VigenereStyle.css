@@ -1,0 +1,212 @@
+/* General Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* Main Styles */
+.main {
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+textarea {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.result-container {
+  margin-top: 1rem;
+}
+
+.result-container h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-short {
+  font-size: 1.1rem;
+  color: #333;
+  word-wrap: break-word;
+}
+
+/* Footer Styles */
+.vigenere-footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f0f0f0;
+}
+
+.vigenere-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Button Styles */
+.vigenere-one {
+    position: auto;
+    bottom: 50%;
+    left: 500px;
+    background: red;
+    border-radius: 30px;
+    color: #fff; /* Text color for .one */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: .8rem 2rem;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    text-transform: uppercase;
+    transition: all .3s ease;
+}
+
+.vigenere-one:hover {
+    background: darkred;
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.vigenere-zero {
+    position: auto;
+    bottom: 30%;
+    background: blue;
+    border-radius: 30px;
+    color: #fff; /* Text color for .zero */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: .8rem 0.9rem;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    text-transform: uppercase;
+    transition: all .3s ease;
+}
+
+.vigenere-zero:hover {
+    background: darkblue;
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+/* General styles for the header */
+.header2 {
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+  padding: 15px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure header stays on top */
+}
+
+/* Navigation container */
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* Space between links */
+}
+
+/* Link styles */
+.header-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Hover effect for links */
+.header-nav a:hover {
+  background: rgba(255, 255, 255, 0.1); /* Light background on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Underline animation on hover */
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.header-nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Active link style */
+.header-nav a.active {
+  background: rgba(255, 255, 255, 0.2); /* Slightly darker background for active link */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .header-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-nav a {
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+  }
+}
