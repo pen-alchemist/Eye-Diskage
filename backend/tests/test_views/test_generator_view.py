@@ -1,155 +1,147 @@
 import json
 import pytest
 
-from django.test import RequestFactory
-from django.middleware.csrf import get_token
-from django.http import JsonResponse
+from django.test import Client
+from django.urls import reverse
 
-from rest_framework.response import Response
 from rest_framework import status
-
-from backend.views import generator_view
 
 
 @pytest.fixture
-def request_factory():
-    return RequestFactory()
+def client_django():
+    return Client()
 
-def test_generator_view_post_valid_request_status_code(request_factory):
+def test_generator_view_post_valid_request_status_code(client_django):
     """Test the status code for a valid POST request."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
+    url = reverse('eye-django-gen')  # Ensure the correct URL name is used
+    response = client_django.post(url)
     assert response.status_code == status.HTTP_200_OK
 
-def test_generator_view_post_valid_request_response_type(request_factory):
+def test_generator_view_post_valid_request_response_type(client_django):
     """Test the response type for a valid POST request."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
-    assert isinstance(response, JsonResponse)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
+    assert response['Content-Type'] == 'application/json'
 
-def test_generator_view_post_valid_request_response_data_has_key(request_factory):
+def test_generator_view_post_valid_request_response_data_has_key(client_django):
     """Test that the response data contains a 'key' field for a valid POST request."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
     response_data = json.loads(response.content)
     assert 'key' in response_data
 
-def test_generator_view_post_valid_request_response_data_key_not_empty(request_factory):
+def test_generator_view_post_valid_request_response_data_key_not_empty(client_django):
     """Test that the 'key' in the response data is not empty for a valid POST request."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
     response_data = json.loads(response.content)
     assert len(response_data['key']) > 0
 
-def test_generator_view_post_invalid_csrf_status_code(request_factory):
+def test_generator_view_post_invalid_csrf_status_code(client_django):
     """Test the status code for a POST request without a CSRF token."""
-    request = request_factory.post('/generator/')
-    # No CSRF token is added to the request
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    client_django.cookies.clear()  # Clear CSRF token
+    response = client_django.post(url)
     assert response.status_code == status.HTTP_403_FORBIDDEN  # CSRF failure
 
-def test_generator_view_get_request_status_code(request_factory):
+def test_generator_view_get_request_status_code(client_django):
     """Test the status code for an invalid GET request."""
-    request = request_factory.get('/generator/')
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.get(url)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-def test_generator_view_get_request_response_type(request_factory):
+def test_generator_view_get_request_response_type(client_django):
     """Test the response type for an invalid GET request."""
-    request = request_factory.get('/generator/')
-    response = generator_view(request)
-    assert isinstance(response, Response)
+    url = reverse('eye-django-gen')
+    response = client_django.get(url)
+    assert response['Content-Type'] == 'application/json'
 
-def test_generator_view_get_request_response_data(request_factory):
+def test_generator_view_get_request_response_data(client_django):
     """Test the response data for an invalid GET request."""
-    request = request_factory.get('/generator/')
-    response = generator_view(request)
-    assert response.data == {"error": "Invalid request method."}
+    url = reverse('geneye-django-generator')
+    response = client_django.get(url)
+    response_data = json.loads(response.content)
+    assert response_data == {"error": "Invalid request method."}
 
-def test_generator_view_put_request_status_code(request_factory):
+def test_generator_view_put_request_status_code(client_django):
     """Test the status code for an invalid PUT request."""
-    request = request_factory.put('/generator/')
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.put(url)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-def test_generator_view_put_request_response_type(request_factory):
+def test_generator_view_put_request_response_type(client_django):
     """Test the response type for an invalid PUT request."""
-    request = request_factory.put('/generator/')
-    response = generator_view(request)
-    assert isinstance(response, Response)
+    url = reverse('eye-django-gen')
+    response = client_django.put(url)
+    assert response['Content-Type'] == 'application/json'
 
-def test_generator_view_put_request_response_data(request_factory):
+def test_generator_view_put_request_response_data(client_django):
     """Test the response data for an invalid PUT request."""
-    request = request_factory.put('/generator/')
-    response = generator_view(request)
-    assert response.data == {"error": "Invalid request method."}
+    url = reverse('eye-django-gen')
+    response = client_django.put(url)
+    response_data = json.loads(response.content)
+    assert response_data == {"error": "Invalid request method."}
 
-def test_generator_view_delete_request_status_code(request_factory):
+def test_generator_view_delete_request_status_code(client_django):
     """Test the status code for an invalid DELETE request."""
-    request = request_factory.delete('/generator/')
-    response = generator_view(request)
+    url = reverse('generaeye-django-gentor')
+    response = client_django.delete(url)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-def test_generator_view_delete_request_response_type(request_factory):
+def test_generator_view_delete_request_response_type(client_django):
     """Test the response type for an invalid DELETE request."""
-    request = request_factory.delete('/generator/')
-    response = generator_view(request)
-    assert isinstance(response, Response)
+    url = reverse('eye-django-gen')
+    response = client_django.delete(url)
+    assert response['Content-Type'] == 'application/json'
 
-def test_generator_view_delete_request_response_data(request_factory):
+def test_generator_view_delete_request_response_data(client_django):
     """Test the response data for an invalid DELETE request."""
-    request = request_factory.delete('/generator/')
-    response = generator_view(request)
-    assert response.data == {"error": "Invalid request method."}
+    url = reverse('eye-django-gen')
+    response = client_django.delete(url)
+    response_data = json.loads(response.content)
+    assert response_data == {"error": "Invalid request method."}
 
-def test_generator_view_patch_request_status_code(request_factory):
+def test_generator_view_patch_request_status_code(client_django):
     """Test the status code for an invalid PATCH request."""
-    request = request_factory.patch('/generator/')
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.patch(url)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-def test_generator_view_patch_request_response_type(request_factory):
+def test_generator_view_patch_request_response_type(client_django):
     """Test the response type for an invalid PATCH request."""
-    request = request_factory.patch('/generator/')
-    response = generator_view(request)
-    assert isinstance(response, Response)
+    url = reverse('geneeye-django-genrator')
+    response = client_django.patch(url)
+    assert response['Content-Type'] == 'application/json'
 
-def test_generator_view_patch_request_response_data(request_factory):
+def test_generator_view_patch_request_response_data(client_django):
     """Test the response data for an invalid PATCH request."""
-    request = request_factory.patch('/generator/')
-    response = generator_view(request)
-    assert response.data == {"error": "Invalid request method."}
+    url = reverse('eye-django-gen')
+    response = client_django.patch(url)
+    response_data = json.loads(response.content)
+    assert response_data == {"error": "Invalid request method."}
 
-def test_generator_view_with_allowany_permission_status_code(request_factory):
+def test_generator_view_with_allowany_permission_status_code(client_django):
     """Test the status code for a POST request with AllowAny permission."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
     assert response.status_code == status.HTTP_200_OK
 
-def test_generator_view_with_allowany_permission_response_type(request_factory):
+def test_generator_view_with_allowany_permission_response_type(client_django):
     """Test the response type for a POST request with AllowAny permission."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
-    assert isinstance(response, JsonResponse)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
+    assert response['Content-Type'] == 'application/json'
 
-def test_generator_view_with_allowany_permission_response_data_has_key(request_factory):
+def test_generator_view_with_allowany_permission_response_data_has_key(client_django):
     """Test that the response data contains a 'key' field for a POST request with AllowAny permission."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
     response_data = json.loads(response.content)
     assert 'key' in response_data
 
-def test_generator_view_with_allowany_permission_response_data_key_not_empty(request_factory):
+def test_generator_view_with_allowany_permission_response_data_key_not_empty(client_django):
     """Test that the 'key' in the response data is not empty for a POST request with AllowAny permission."""
-    request = request_factory.post('/generator/')
-    request.csrf_token = get_token(request)  # Simulate CSRF token
-    response = generator_view(request)
+    url = reverse('eye-django-gen')
+    response = client_django.post(url)
     response_data = json.loads(response.content)
     assert len(response_data['key']) > 0
