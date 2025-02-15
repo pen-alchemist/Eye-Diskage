@@ -8,14 +8,14 @@ class MainPage(BasePage):
     def is_title_matches(self):
         """Verifies that the hardcoded text "React App" appears in page title"""
 
-        expected_title = "React App"
+        expected_title = "Eye-Diskage"
 
         return expected_title == self.driver.title
 
     def is_url_matches(self):
         """Verifies that the URL is correct on Main Page"""
 
-        page_url = 'http://localhost:3000/main'
+        page_url = 'http://localhost:3000/'
 
         return page_url == self.driver.current_url
 
@@ -25,48 +25,60 @@ class MainPage(BasePage):
         element = self.driver.find_element(*MainPageLocators.MAIN_HEADER)
         expected_header = 'Eye-Diskage: Django Secret Key Generator'
 
-        return expected_header != element.text
+        return expected_header == element.text
 
-    def click_navigation_button(self):
+    def click_navigation_button_main(self):
         """Triggers the navigation button and checks URL"""
 
-        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_ABOUT)
+        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_MAIN)
         element.click()
-        page_url = 'http://localhost:3000/about'
+        page_url = 'http://localhost:3000/main'
 
         return page_url == self.driver.current_url
+
+    def click_navigation_button_nums(self):
+        """Triggers the navigation button and checks URL"""
+
+        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_NUMS)
+        element.click()
+        page_url = 'http://localhost:3000/random/numbers'
+
+        return page_url == self.driver.current_url
+
+    def click_navigation_button_caesar(self):
+        """Triggers the navigation button and checks URL"""
+
+        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_CAESAR)
+        element.click()
+        page_url = 'http://localhost:3000/caesar'
+
+        return page_url == self.driver.current_url
+
+    def click_navigation_button_vigenere(self):
+        """Triggers the navigation button and checks URL"""
+
+        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_VIGENERE)
+        element.click()
+        page_url = 'http://localhost:3000/vigenere'
+
+        return page_url == self.driver.current_url
+
+    def click_navigation_button_colyte(self):
+        """Triggers the navigation button and checks URL"""
+
+        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_COLYTE)
+        element.click()
+        page_url = 'https://colyte.pro/'
+
+        return page_url == element.get_attribute('href')
 
     def is_sub_header_matches(self):
         """Triggers the navigation and checks sub header text"""
 
         element = self.driver.find_element(*MainPageLocators.SUB_HEADER)
-        expected_header = 'All Blogs'
+        expected_header = 'Your Secret Key'
 
         return expected_header == element.text
-
-    def is_no_posts_message_matches(self):
-        """Triggers the header element and checks no posts message text"""
-
-        element = self.driver.find_element(*MainPageLocators.NO_POSTS_MESSAGE)
-        expected_message = 'There are no posts!'
-
-        return expected_message == element.text
-
-    def is_pages_counter_matches(self):
-        """Triggers the span element and checks pages counter text"""
-
-        element = self.driver.find_element(*MainPageLocators.PAGES_COUNTER)
-        expected_counter = 'Page 1 of 1'
-
-        return expected_counter == element.text
-
-    def disabled_page_previous_button(self):
-        """Triggers the previous button and check is it disabled"""
-
-        element = self.driver.find_element(*MainPageLocators.PREVIOUS_BUTTON)
-        expected_btn_status = element.is_enabled()
-
-        return expected_btn_status
 
     def disabled_page_next_button(self):
         """Triggers the next button and check is it disabled"""
@@ -80,6 +92,6 @@ class MainPage(BasePage):
         """Triggers the footer element and checks footer text"""
 
         element = self.driver.find_element(*MainPageLocators.FOOTER_TEXT)
-        expected_footer = '© 2025 by Yehor Romanov @wwwinri aka @pen-alchemist'
+        expected_footer = '2025 by Yehor Romanov @wwwinri aka @pen-alchemist'
 
         return expected_footer == element.text
