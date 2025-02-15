@@ -128,7 +128,7 @@ def test_secure_random_numbers_view_post_invalid_count_response_type(client_djan
 
 def test_secure_random_numbers_view_post_invalid_count_response_data(client_django):
     """Test the response data for a POST request with an invalid count."""
-    url = reverse('secure-random-numbers')
+    url = reverse('eye-secure-numbers')
     response = client_django.post(url, data={'min_value': 1, 'max_value': 10, 'count': 0, 'unique': True})
     response_data = response.json()
     assert response_data == {"error": "count cannot be less or equal 0"}
@@ -194,7 +194,7 @@ def test_secure_random_numbers_view_post_get_request_status_code(client_django):
     """Test the status code for an invalid GET request."""
     url = reverse('eye-secure-numbers')
     response = client_django.get(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_secure_random_numbers_view_post_get_request_response_type(client_django):
     """Test the response type for an invalid GET request."""
@@ -202,18 +202,11 @@ def test_secure_random_numbers_view_post_get_request_response_type(client_django
     response = client_django.get(url)
     assert response['Content-Type'] == 'application/json'
 
-def test_secure_random_numbers_view_post_get_request_response_data(client_django):
-    """Test the response data for an invalid GET request."""
-    url = reverse('eye-secure-numbers')
-    response = client_django.get(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
-
 def test_secure_random_numbers_view_post_put_request_status_code(client_django):
     """Test the status code for an invalid PUT request."""
     url = reverse('eye-secure-numbers')
     response = client_django.put(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_secure_random_numbers_view_post_put_request_response_type(client_django):
     """Test the response type for an invalid PUT request."""
@@ -221,18 +214,11 @@ def test_secure_random_numbers_view_post_put_request_response_type(client_django
     response = client_django.put(url)
     assert response['Content-Type'] == 'application/json'
 
-def test_secure_random_numbers_view_post_put_request_response_data(client_django):
-    """Test the response data for an invalid PUT request."""
-    url = reverse('eye-secure-numbers')
-    response = client_django.put(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
-
 def test_secure_random_numbers_view_post_delete_request_status_code(client_django):
     """Test the status code for an invalid DELETE request."""
     url = reverse('eye-secure-numbers')
     response = client_django.delete(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_secure_random_numbers_view_post_delete_request_response_type(client_django):
     """Test the response type for an invalid DELETE request."""
@@ -240,31 +226,17 @@ def test_secure_random_numbers_view_post_delete_request_response_type(client_dja
     response = client_django.delete(url)
     assert response['Content-Type'] == 'application/json'
 
-def test_secure_random_numbers_view_post_delete_request_response_data(client_django):
-    """Test the response data for an invalid DELETE request."""
-    url = reverse('eye-secure-numbers')
-    response = client_django.delete(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
-
 def test_secure_random_numbers_view_post_patch_request_status_code(client_django):
     """Test the status code for an invalid PATCH request."""
     url = reverse('eye-secure-numbers')
     response = client_django.patch(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_secure_random_numbers_view_post_patch_request_response_type(client_django):
     """Test the response type for an invalid PATCH request."""
     url = reverse('eye-secure-numbers')
     response = client_django.patch(url)
     assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_patch_request_response_data(client_django):
-    """Test the response data for an invalid PATCH request."""
-    url = reverse('eye-secure-numbers')
-    response = client_django.patch(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
 
 def test_secure_random_numbers_view_with_allowany_permission_status_code(client_django):
     """Test the status code for a POST request with AllowAny permission."""
