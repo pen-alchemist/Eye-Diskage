@@ -71,7 +71,7 @@ def test_generator_view_delete_request_status_code(client_django):
     """Test the status code for an invalid DELETE request."""
     url = reverse('generaeye-django-gentor')
     response = client_django.delete(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_delete_request_response_type(client_django):
     """Test the response type for an invalid DELETE request."""
@@ -89,11 +89,11 @@ def test_generator_view_patch_request_status_code(client_django):
     """Test the status code for an invalid PATCH request."""
     url = reverse('eye-django-gen')
     response = client_django.patch(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_patch_request_response_type(client_django):
     """Test the response type for an invalid PATCH request."""
-    url = reverse('geneeye-django-genrator')
+    url = reverse('eye-django-gen')
     response = client_django.patch(url)
     assert response['Content-Type'] == 'application/json'
 
