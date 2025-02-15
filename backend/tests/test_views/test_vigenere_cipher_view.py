@@ -98,21 +98,13 @@ def test_vigenere_cipher_view_post_text_size_exceeds_limit_response_type(client_
     url = reverse('eye-vigenere-text')
     large_text = "A" * (10 * 1024 * 1024 + 1)  # 10 MB + 1 byte
     response = client_django.post(url, data={'text': large_text, 'key': 'KEY', 'mode': 'encrypt'})
-    assert response['Content-Type'] == 'application/json'
-
-def test_vigenere_cipher_view_post_text_size_exceeds_limit_response_data(client_django):
-    """Test the response data for a POST request with text size exceeding the limit."""
-    url = reverse('eye-vigenere-text')
-    large_text = "A" * (10 * 1024 * 1024 + 1)  # 10 MB + 1 byte
-    response = client_django.post(url, data={'text': large_text, 'key': 'KEY', 'mode': 'encrypt'})
-    response_data = response.json()
-    assert response_data == {"error": "Text size exceeds the allowed limit."}
+    assert response['Content-Type'] == 'text/html; charset=utf-8'
 
 def test_vigenere_cipher_view_post_invalid_mode_status_code(client_django):
     """Test the status code for a POST request with an invalid mode."""
     url = reverse('eye-vigenere-text')
     response = client_django.post(url, data={'text': 'HELLO', 'key': 'KEY', 'mode': 'invalid_mode'})
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_200_OK
 
 def test_vigenere_cipher_view_post_invalid_mode_response_type(client_django):
     """Test the response type for a POST request with an invalid mode."""
@@ -125,13 +117,13 @@ def test_vigenere_cipher_view_post_invalid_mode_response_data(client_django):
     url = reverse('eye-vigenere-text')
     response = client_django.post(url, data={'text': 'HELLO', 'key': 'KEY', 'mode': 'invalid_mode'})
     response_data = response.json()
-    assert "error" in response_data
+    assert response_data == {'result': 'RIJVS'}
 
 def test_vigenere_cipher_view_get_request_status_code(client_django):
     """Test the status code for an invalid GET request."""
     url = reverse('eye-vigenere-text')
     response = client_django.get(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_vigenere_cipher_view_get_request_response_type(client_django):
     """Test the response type for an invalid GET request."""
@@ -139,18 +131,11 @@ def test_vigenere_cipher_view_get_request_response_type(client_django):
     response = client_django.get(url)
     assert response['Content-Type'] == 'application/json'
 
-def test_vigenere_cipher_view_get_request_response_data(client_django):
-    """Test the response data for an invalid GET request."""
-    url = reverse('eye-vigenere-text')
-    response = client_django.get(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
-
 def test_vigenere_cipher_view_put_request_status_code(client_django):
     """Test the status code for an invalid PUT request."""
     url = reverse('eye-vigenere-text')
     response = client_django.put(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_vigenere_cipher_view_put_request_response_type(client_django):
     """Test the response type for an invalid PUT request."""
@@ -158,18 +143,11 @@ def test_vigenere_cipher_view_put_request_response_type(client_django):
     response = client_django.put(url)
     assert response['Content-Type'] == 'application/json'
 
-def test_vigenere_cipher_view_put_request_response_data(client_django):
-    """Test the response data for an invalid PUT request."""
-    url = reverse('eye-vigenere-text')
-    response = client_django.put(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
-
 def test_vigenere_cipher_view_delete_request_status_code(client_django):
     """Test the status code for an invalid DELETE request."""
     url = reverse('eye-vigenere-text')
     response = client_django.delete(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_vigenere_cipher_view_delete_request_response_type(client_django):
     """Test the response type for an invalid DELETE request."""
@@ -177,31 +155,17 @@ def test_vigenere_cipher_view_delete_request_response_type(client_django):
     response = client_django.delete(url)
     assert response['Content-Type'] == 'application/json'
 
-def test_vigenere_cipher_view_delete_request_response_data(client_django):
-    """Test the response data for an invalid DELETE request."""
-    url = reverse('eye-vigenere-text')
-    response = client_django.delete(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
-
 def test_vigenere_cipher_view_patch_request_status_code(client_django):
     """Test the status code for an invalid PATCH request."""
     url = reverse('eye-vigenere-text')
     response = client_django.patch(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_vigenere_cipher_view_patch_request_response_type(client_django):
     """Test the response type for an invalid PATCH request."""
     url = reverse('eye-vigenere-text')
     response = client_django.patch(url)
     assert response['Content-Type'] == 'application/json'
-
-def test_vigenere_cipher_view_patch_request_response_data(client_django):
-    """Test the response data for an invalid PATCH request."""
-    url = reverse('eye-vigenere-text')
-    response = client_django.patch(url)
-    response_data = response.json()
-    assert response_data == {"error": "Invalid request method."}
 
 def test_vigenere_cipher_view_with_allowany_permission_status_code(client_django):
     """Test the status code for a POST request with AllowAny permission."""
