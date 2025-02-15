@@ -71,27 +71,3 @@ class MainPage(BasePage):
         page_url = 'https://colyte.pro/'
 
         return page_url == element.get_attribute('href')
-
-    def is_sub_header_matches(self):
-        """Triggers the navigation and checks sub header text"""
-
-        element = self.driver.find_element(*MainPageLocators.SUB_HEADER)
-        expected_header = 'Your Secret Key'
-
-        return expected_header == element.text
-
-    def disabled_page_next_button(self):
-        """Triggers the next button and check is it disabled"""
-
-        element = self.driver.find_element(*MainPageLocators.NEXT_BUTTON)
-        expected_btn_status = element.is_enabled()
-
-        return expected_btn_status
-
-    def is_footer_matches(self):
-        """Triggers the footer element and checks footer text"""
-
-        element = self.driver.find_element(*MainPageLocators.FOOTER_TEXT)
-        expected_footer = '2025 by Yehor Romanov @wwwinri aka @pen-alchemist'
-
-        return expected_footer == element.text

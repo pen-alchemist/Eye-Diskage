@@ -45,14 +45,34 @@ def chrome_driver():
 
 @pytest.fixture
 def wait_for(chrome_driver):
-    """Fixture to wait for a condition to be met."""
-    def _wait_for(fn):
+    """Fixture to wait for a condition to be met, supporting both functions and assertions."""
+
+    def _wait_for(condition, message=None):
+        """
+        Wait for a condition to be met.
+
+        Args:
+            condition: A function or lambda that returns a boolean or raises an AssertionError.
+            message (str): Optional custom error message to log if the condition fails.
+        """
         MAX_WAIT = 10
         start_time = time.time()
 
         while True:
             try:
-                return fn()
+                # If the condition is a function, evaluate it
+                if callable(condition):
+                    result = condition()
+                    if not result:
+                        raise AssertionError(message or "Condition not met")
+                    return result
+                # If the condition is a boolean, check it directly
+                elif isinstance(condition, bool):
+                    if not condition:
+                        raise AssertionError(message or "Condition not met")
+                    return condition
+                else:
+                    raise ValueError("Condition must be a callable or a boolean")
             except (AssertionError, WebDriverException) as error:
                 if time.time() - start_time > MAX_WAIT:
                     logger.error(f'ERROR (WAITING CAUGHT ERROR): {error}')
@@ -60,4 +80,5 @@ def wait_for(chrome_driver):
                     chrome_driver.save_screenshot(f'{BASE_DIR}/test_logs/test-failed-{time_now}.png')
                     raise error
                 time.sleep(0.5)
+
     return _wait_for
