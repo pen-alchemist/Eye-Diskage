@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.core.management.utils import get_random_secret_key
@@ -23,7 +25,7 @@ def generator_view(request):
             'key': _secret_key
         }
 
-        return JsonResponse(response)
+        return JsonResponse(response, status=HTTPStatus.OK)
 
     return Response({"error": "Invalid request method."}, status=status.HTTP_400_BAD_REQUEST)
 

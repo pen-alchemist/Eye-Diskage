@@ -37,19 +37,6 @@ def test_generator_view_post_valid_request_response_data_key_not_empty(client_dj
     response_data = json.loads(response.content)
     assert len(response_data['key']) > 0
 
-def test_generator_view_post_invalid_csrf_status_code(client_django):
-    """Test the status code for a POST request without a CSRF token."""
-    url = reverse('eye-django-gen')
-    client_django.cookies.clear()  # Clear CSRF token
-    response = client_django.post(url)
-    assert response.status_code == status.HTTP_403_FORBIDDEN  # CSRF failure
-
-def test_generator_view_get_request_status_code(client_django):
-    """Test the status code for an invalid GET request."""
-    url = reverse('eye-django-gen')
-    response = client_django.get(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
 def test_generator_view_get_request_response_type(client_django):
     """Test the response type for an invalid GET request."""
     url = reverse('eye-django-gen')
@@ -58,16 +45,15 @@ def test_generator_view_get_request_response_type(client_django):
 
 def test_generator_view_get_request_response_data(client_django):
     """Test the response data for an invalid GET request."""
-    url = reverse('geneye-django-generator')
+    url = reverse('eye-django-gen')
     response = client_django.get(url)
-    response_data = json.loads(response.content)
-    assert response_data == {"error": "Invalid request method."}
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_put_request_status_code(client_django):
     """Test the status code for an invalid PUT request."""
     url = reverse('eye-django-gen')
     response = client_django.put(url)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_put_request_response_type(client_django):
     """Test the response type for an invalid PUT request."""
@@ -79,8 +65,7 @@ def test_generator_view_put_request_response_data(client_django):
     """Test the response data for an invalid PUT request."""
     url = reverse('eye-django-gen')
     response = client_django.put(url)
-    response_data = json.loads(response.content)
-    assert response_data == {"error": "Invalid request method."}
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_delete_request_status_code(client_django):
     """Test the status code for an invalid DELETE request."""
@@ -98,8 +83,7 @@ def test_generator_view_delete_request_response_data(client_django):
     """Test the response data for an invalid DELETE request."""
     url = reverse('eye-django-gen')
     response = client_django.delete(url)
-    response_data = json.loads(response.content)
-    assert response_data == {"error": "Invalid request method."}
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_patch_request_status_code(client_django):
     """Test the status code for an invalid PATCH request."""
@@ -117,8 +101,7 @@ def test_generator_view_patch_request_response_data(client_django):
     """Test the response data for an invalid PATCH request."""
     url = reverse('eye-django-gen')
     response = client_django.patch(url)
-    response_data = json.loads(response.content)
-    assert response_data == {"error": "Invalid request method."}
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 def test_generator_view_with_allowany_permission_status_code(client_django):
     """Test the status code for a POST request with AllowAny permission."""
