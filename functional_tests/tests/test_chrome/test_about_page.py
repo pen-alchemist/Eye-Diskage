@@ -1,5 +1,5 @@
 from functional_tests.pages import about_page_object as page
-from functional_tests.tests.test_chrome.base import FunctionalTestChrome
+from functional_tests.tests.test_chrome.conftest import FunctionalTestChrome
 
 
 class TestAboutPageChrome(FunctionalTestChrome):

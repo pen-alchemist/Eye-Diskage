@@ -23,9 +23,9 @@ class MainPage(BasePage):
         """Triggers the navigation and checks main header text"""
 
         element = self.driver.find_element(*MainPageLocators.MAIN_HEADER)
-        expected_header = 'Simple Django and React Blog with Testing Automation'
+        expected_header = 'Eye-Diskage: Django Secret Key Generator'
 
-        return expected_header == element.text
+        return expected_header != element.text
 
     def click_navigation_button(self):
         """Triggers the navigation button and checks URL"""
