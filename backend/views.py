@@ -44,7 +44,14 @@ def caesar_cipher_view(request):
         if len(text.encode('utf-8')) > MAX_TEXT_SIZE:
             return Response({"error": "Text size exceeds the allowed limit."}, status=status.HTTP_400_BAD_REQUEST)
 
-        result = caesar_cipher(text, shift=shift, mode=mode)
+        try:
+            result = caesar_cipher(text, shift=shift, mode=mode)
+        except TypeError as type_error:
+            return Response({"error": f"Wrong data type! {type_error}"}, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as val_error:
+            return Response({"error": f"Wrong shift type! {val_error}"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": f"An unexpected error occurred. {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"result": result}, status=status.HTTP_200_OK)
 
@@ -112,6 +119,6 @@ def secure_random_numbers_view(request):
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({"error": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": f"An unexpected error occurred. {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return Response({"error": "Invalid request method."}, status=status.HTTP_400_BAD_REQUEST)

@@ -8,6 +8,7 @@ def caesar_cipher(text, shift, mode='encrypt'):
     :return: The encrypted or decrypted text.
     """
     result = ""
+    shift = int(shift)
 
     # Determine the shift direction based on the mode
     if mode == 'decrypt':
