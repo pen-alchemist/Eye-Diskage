@@ -69,7 +69,7 @@ def test_generator_view_put_request_response_data(client_django):
 
 def test_generator_view_delete_request_status_code(client_django):
     """Test the status code for an invalid DELETE request."""
-    url = reverse('generaeye-django-gentor')
+    url = reverse('eye-django-gen')
     response = client_django.delete(url)
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 

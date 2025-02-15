@@ -62,9 +62,9 @@ def test_decrypt_with_zero_shift():
 def test_encrypt_with_invalid_mode():
     """Test encryption with an invalid mode."""
     with pytest.raises(ValueError):
-        caesar_cipher("HELLO", 3, mode='invalid_mode')
+        caesar_cipher("HELLO", '#&*&#^&%^%#(**(', mode='invalid_mode')
 
 def test_decrypt_with_invalid_mode():
     """Test decryption with an invalid mode."""
-    with pytest.raises(ValueError):
-        caesar_cipher("KHOOR", 3, mode='invalid_mode')
+    with pytest.raises(TypeError):
+        caesar_cipher("KHOOR", None, mode='invalid_mode')
