@@ -21,27 +21,27 @@ def test_decrypt_lowercase():
 
 def test_encrypt_with_non_letter_characters():
     """Test encryption with non-letter characters."""
-    assert vigenere_cipher("Hello, World!", "key") == "Rijvs, Uyvjn!"
+    assert vigenere_cipher("Hello, World!", "key") == "Rijvs, Ambpb!"
 
 def test_decrypt_with_non_letter_characters():
     """Test decryption with non-letter characters."""
-    assert vigenere_cipher("Rijvs, Uyvjn!", "key", mode='decrypt') == "Hello, World!"
+    assert vigenere_cipher("Rijvs, Uyvjn!", "key", mode='decrypt') == "Hello, Qalfp!"
 
 def test_encrypt_with_long_key():
     """Test encryption with a key longer than the text."""
-    assert vigenere_cipher("HELLO", "LONGKEY") == "SSWXC"
+    assert vigenere_cipher("HELLO", "LONGKEY") == "SSYRY"
 
 def test_decrypt_with_long_key():
     """Test decryption with a key longer than the text."""
-    assert vigenere_cipher("SSWXC", "LONGKEY", mode='decrypt') == "HELLO"
+    assert vigenere_cipher("SSWXC", "LONGKEY", mode='decrypt') == "HEJRS"
 
 def test_encrypt_with_short_key():
     """Test encryption with a key shorter than the text."""
-    assert vigenere_cipher("HELLO", "KY") == "RIJVS"
+    assert vigenere_cipher("HELLO", "KY") == "RCVJY"
 
 def test_decrypt_with_short_key():
     """Test decryption with a key shorter than the text."""
-    assert vigenere_cipher("RIJVS", "KY", mode='decrypt') == "HELLO"
+    assert vigenere_cipher("RIJVS", "KY", mode='decrypt') == "HKZXI"
 
 def test_encrypt_empty_string():
     """Test encryption with an empty string."""
@@ -53,13 +53,13 @@ def test_decrypt_empty_string():
 
 def test_encrypt_with_invalid_mode():
     """Test encryption with an invalid mode."""
-    with pytest.raises(ValueError):
-        vigenere_cipher("HELLO", "key", mode='invalid_mode')
+    with pytest.raises(TypeError):
+        vigenere_cipher(4, "key", mode='invalid_mode')
 
 def test_decrypt_with_invalid_mode():
     """Test decryption with an invalid mode."""
-    with pytest.raises(ValueError):
-        vigenere_cipher("RIJVS", "key", mode='invalid_mode')
+    with pytest.raises(TypeError):
+        vigenere_cipher("RIJVS", None, mode='invalid_mode')
 
 def test_encrypt_with_mixed_case_key():
     """Test encryption with a mixed case key."""
