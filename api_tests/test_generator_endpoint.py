@@ -1,20 +1,9 @@
 import json
-import pytest
-
-from django.test import RequestFactory
 
 from rest_framework import status
 
 from backend.views import generator_view
 
-
-@pytest.fixture
-def rf():
-    return RequestFactory()
-
-@pytest.fixture
-def caesar_cipher_url():
-    return "/api/eye_diskage/django-ker-generate/"
 
 def test_generator_view_post_valid_request_status_code(rf, caesar_cipher_url):
     """Test the status code for a valid POST request."""

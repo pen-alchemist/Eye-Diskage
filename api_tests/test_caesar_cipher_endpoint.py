@@ -2,20 +2,11 @@ import json
 import pytest
 
 from django.core.exceptions import RequestDataTooBig
-from django.test import RequestFactory
 
 from rest_framework import status
 
 from backend.views import caesar_cipher_view
 
-
-@pytest.fixture
-def rf():
-    return RequestFactory()
-
-@pytest.fixture
-def caesar_cipher_url():
-    return "/api/eye_diskage/caesar-cipher/"
 
 def test_caesar_cipher_view_post_valid_encrypt_status_code(rf, caesar_cipher_url):
     """Test the status code for a valid POST request for encryption."""

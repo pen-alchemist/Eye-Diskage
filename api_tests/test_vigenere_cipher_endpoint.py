@@ -2,30 +2,9 @@ import json
 import pytest
 
 from django.core.exceptions import RequestDataTooBig
-from django.test import RequestFactory
 
 from rest_framework import status
 from backend.views import vigenere_cipher_view
-
-
-@pytest.fixture
-def rf():
-    return RequestFactory()
-
-
-@pytest.fixture
-def vigenere_cipher_url():
-    return "/api/eye_diskage/vigenere-cipher/"
-
-
-@pytest.fixture
-def valid_encrypt_data():
-    return {'text': 'HELLO', 'key': 'KEY', 'mode': 'encrypt'}
-
-
-@pytest.fixture
-def valid_decrypt_data():
-    return {'text': 'RIJVS', 'key': 'KEY', 'mode': 'decrypt'}
 
 
 def test_vigenere_cipher_view_post_valid_encrypt_status_code(rf, vigenere_cipher_url, valid_encrypt_data):

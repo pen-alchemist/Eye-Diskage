@@ -1,20 +1,9 @@
 import json
-import pytest
-
-from django.test import RequestFactory
 
 from rest_framework import status
 
 from backend.views import secure_random_numbers_view
 
-
-@pytest.fixture
-def rf():
-    return RequestFactory()
-
-@pytest.fixture
-def secure_random_numbers_url():
-    return "/api/eye_diskage/secure-random-numbers/"
 
 def test_secure_random_numbers_view_post_valid_status_code(rf, secure_random_numbers_url):
     """Test the status code for a valid POST request."""

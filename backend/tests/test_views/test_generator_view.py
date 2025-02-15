@@ -1,15 +1,9 @@
 import json
-import pytest
 
-from django.test import Client
 from django.urls import reverse
 
 from rest_framework import status
 
-
-@pytest.fixture
-def client_django():
-    return Client()
 
 def test_generator_view_post_valid_request_status_code(client_django):
     """Test the status code for a valid POST request."""
