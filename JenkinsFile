@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HOST = "unix:///var/run/docker.sock"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml build backend'
+            }
+        }
+
+        stage('Test Backend') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml run backend python manage.py test'
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml build frontend'
+            }
+        }
+
+        stage('Test Frontend') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml run frontend yarn test --watchAll=false'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'docker-compose -f docker-compose.yml up -d'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
