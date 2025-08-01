@@ -16,23 +16,7 @@
         key: ''
     });
 
-const fetchData = async () => {
-        try {
-            const response = await axios(`${API_URL}/api/eye_diskage/django-ker-generate/`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const { key } = response.data;
-            setData({
-                key
-            });
-        } catch (error) {}
-    };
-
     useEffect(() => {
-        fetchData();
     }, [navigate, location]);
 
   return (
