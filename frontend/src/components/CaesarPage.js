@@ -54,7 +54,8 @@ const CaesarCipherPage = () => {
       </header>
       <header className="header2">
         <nav className="header-nav">
-          <a href="/main">Django Secret Key Gen</a>
+          <a href="/main">Home Page</a>
+          <a href="/django">Django Secret Key Gen</a>
           <a href="/random/numbers">Random Number Generator</a>
           <a href="/caesar">Caesar Cipher</a>
           <a href="/vigenere">Vigenère Cipher</a>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Main from './components/MainPage';
+import Django from './components/DjangoPage';
 import RandomNumberPage from './components/RandomNumberPage'
 import CaesarCipherPage from './components/CaesarPage';
 import VigenereCipherPage from './components/VigenerePage';
 import MobileMain from './components/mobile/MobileMainPage'
+import MobileDjango from './components/mobile/MobileDjangoPage'
 import MobileRandomNumberPage from './components/mobile/MobileRandomNumberPage'
 import MobileCaesarCipherPage from './components/mobile/MobileCaesarPage'
 import MobileVigenereCipherPage from './components/mobile/MobileVigenerePage'
@@ -39,6 +41,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MobileMain authStatus={authStatus} />} />
             <Route path="/main" element={<MobileMain authStatus={authStatus} />} />
+            <Route path="/django" element={<MobileDjango authStatus={authStatus} />} />
             <Route path="/random/numbers" element={<MobileRandomNumberPage authStatus={authStatus} />} />
             <Route path="/caesar" element={<MobileCaesarCipherPage authStatus={authStatus} />} />
             <Route path="/vigenere" element={<MobileVigenereCipherPage authStatus={authStatus} />} />
@@ -49,6 +52,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Main authStatus={authStatus} />} />
             <Route path="/main" element={<Main authStatus={authStatus} />} />
+            <Route path="/django" element={<Django authStatus={authStatus} />} />
             <Route path="/random/numbers" element={<RandomNumberPage authStatus={authStatus} />} />
             <Route path="/caesar" element={<CaesarCipherPage authStatus={authStatus} />} />
             <Route path="/vigenere" element={<VigenereCipherPage authStatus={authStatus} />} />
