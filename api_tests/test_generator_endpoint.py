@@ -1,138 +1,71 @@
 import json
+import pytest
+import allure
 
 from rest_framework import status
-
 from backend.views import generator_view
 
 
-def test_generator_view_post_valid_request_status_code(rf, caesar_cipher_url):
-    """Test the status code for a valid POST request."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    assert response.status_code == status.HTTP_200_OK
+@allure.feature("Key Generator API")
+@allure.story("Generate key endpoint")
+class TestGeneratorView:
 
-def test_generator_view_post_valid_request_response_type(rf, caesar_cipher_url):
-    """Test the response type for a valid POST request."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    assert response['Content-Type'] == 'application/json'
+    @pytest.fixture
+    def url(self, api_endpoints):
+        """API endpoint URL for the key generator."""
+        return api_endpoints["django_ker_generate"]
 
-def test_generator_view_post_valid_request_response_data_has_key(rf, caesar_cipher_url):
-    """Test that the response data contains a 'key' field for a valid POST request."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    response_data = json.loads(response.content)
-    assert 'key' in response_data
+    @allure.title("POST /django-ker-generate returns 200 OK with valid response")
+    def test_post_valid_request_status_code_and_response(self, rf, url):
+        with allure.step(f"Send POST request to {url}"):
+            request = rf.post(url, content_type="application/json")
+            response = generator_view(request)
 
-def test_generator_view_post_valid_request_response_data_key_not_empty(rf, caesar_cipher_url):
-    """Test that the 'key' in the response data is not empty for a valid POST request."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    response_data = json.loads(response.content)
-    assert len(response_data['key']) > 0
+        with allure.step("Assert status code is 200 OK"):
+            assert response.status_code == status.HTTP_200_OK, f"Expected 200, got {response.status_code}"
 
-def test_generator_view_get_request_status_code(rf, caesar_cipher_url):
-    """Test the status code for an invalid GET request."""
-    request = rf.get(caesar_cipher_url)
-    response = generator_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        with allure.step("Assert response content type is application/json"):
+            assert response['Content-Type'] == 'application/json', f"Expected 'application/json', got {response['Content-Type']}"
 
-def test_generator_view_get_request_response_type(rf, caesar_cipher_url):
-    """Test the response type for an invalid GET request."""
-    request = rf.get(caesar_cipher_url)
-    response = generator_view(request)
-    assert response['Content-Type'] == 'text/html; charset=utf-8'
+        with allure.step("Assert response contains 'key' field which is non-empty"):
+            response_data = json.loads(response.content)
+            assert 'key' in response_data, "'key' field missing in response"
+            assert len(response_data['key']) > 0, "'key' field is empty"
 
-def test_generator_view_get_request_response_data(rf, caesar_cipher_url):
-    """Test the response data for an invalid GET request."""
-    request = rf.get(caesar_cipher_url)
-    response = generator_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "GET" not allowed.'}
+    @pytest.mark.parametrize("method", ['get', 'put', 'delete', 'patch'])
+    @allure.title("Invalid HTTP methods return 405 Method Not Allowed")
+    def test_invalid_methods_return_405(self, rf, url, method):
+        with allure.step(f"Send {method.upper()} request to {url}"):
+            request_method = getattr(rf, method)
+            request = request_method(url, content_type="application/json")
+            response = generator_view(request)
 
-def test_generator_view_put_request_status_code(rf, caesar_cipher_url):
-    """Test the status code for an invalid PUT request."""
-    request = rf.put(caesar_cipher_url)
-    response = generator_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        with allure.step("Assert status code is 405 Method Not Allowed"):
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED, f"Expected 405, got {response.status_code}"
 
-def test_generator_view_put_request_response_type(rf, caesar_cipher_url):
-    """Test the response type for an invalid PUT request."""
-    request = rf.put(caesar_cipher_url)
-    response = generator_view(request)
-    assert response['Content-Type'] == 'text/html; charset=utf-8'
+        with allure.step("Assert response content type is text/html; charset=utf-8"):
+            assert response['Content-Type'] == 'text/html; charset=utf-8', f"Expected 'text/html; charset=utf-8', got {response['Content-Type']}"
 
-def test_generator_view_put_request_response_data(rf, caesar_cipher_url):
-    """Test the response data for an invalid PUT request."""
-    request = rf.put(caesar_cipher_url)
-    response = generator_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "PUT" not allowed.'}
+        with allure.step("Assert response JSON error message"):
+            response.render()
+            json_data = json.loads(response.content.decode('utf-8'))
+            expected_detail = {'detail': f'Method "{method.upper()}" not allowed.'}
+            assert json_data == expected_detail, f"Expected {expected_detail}, got {json_data}"
 
-def test_generator_view_delete_request_status_code(rf, caesar_cipher_url):
-    """Test the status code for an invalid DELETE request."""
-    request = rf.delete(caesar_cipher_url)
-    response = generator_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    @allure.title("POST /django-ker-generate respects AllowAny permission and returns valid key")
+    def test_post_with_allowany_permission(self, rf, url):
+        # This test duplicates the POST test above but is kept for explicit permission check as per original.
+        with allure.step(f"Send POST request with AllowAny permission to {url}"):
+            request = rf.post(url, content_type="application/json")
+            response = generator_view(request)
 
-def test_generator_view_delete_request_response_type(rf, caesar_cipher_url):
-    """Test the response type for an invalid DELETE request."""
-    request = rf.delete(caesar_cipher_url)
-    response = generator_view(request)
-    assert response['Content-Type'] == 'text/html; charset=utf-8'
+        with allure.step("Assert status code is 200 OK"):
+            assert response.status_code == status.HTTP_200_OK, f"Expected 200, got {response.status_code}"
 
-def test_generator_view_delete_request_response_data(rf, caesar_cipher_url):
-    """Test the response data for an invalid DELETE request."""
-    request = rf.delete(caesar_cipher_url)
-    response = generator_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "DELETE" not allowed.'}
+        with allure.step("Assert response content type is application/json"):
+            assert response['Content-Type'] == 'application/json', f"Expected 'application/json', got {response['Content-Type']}"
 
-def test_generator_view_patch_request_status_code(rf, caesar_cipher_url):
-    """Test the status code for an invalid PATCH request."""
-    request = rf.patch(caesar_cipher_url)
-    response = generator_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-def test_generator_view_patch_request_response_type(rf, caesar_cipher_url):
-    """Test the response type for an invalid PATCH request."""
-    request = rf.patch(caesar_cipher_url)
-    response = generator_view(request)
-    assert response['Content-Type'] == 'text/html; charset=utf-8'
-
-def test_generator_view_patch_request_response_data(rf, caesar_cipher_url):
-    """Test the response data for an invalid PATCH request."""
-    request = rf.patch(caesar_cipher_url)
-    response = generator_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "PATCH" not allowed.'}
-
-def test_generator_view_with_allowany_permission_status_code(rf, caesar_cipher_url):
-    """Test the status code for a POST request with AllowAny permission."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    assert response.status_code == status.HTTP_200_OK
-
-def test_generator_view_with_allowany_permission_response_type(rf, caesar_cipher_url):
-    """Test the response type for a POST request with AllowAny permission."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    assert response['Content-Type'] == 'application/json'
-
-def test_generator_view_with_allowany_permission_response_data_has_key(rf, caesar_cipher_url):
-    """Test that the response data contains a 'key' field for a POST request with AllowAny permission."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    response_data = json.loads(response.content)
-    assert 'key' in response_data
-
-def test_generator_view_with_allowany_permission_response_data_key_not_empty(rf, caesar_cipher_url):
-    """Test that the 'key' in the response data is not empty for a POST request with AllowAny permission."""
-    request = rf.post(caesar_cipher_url)
-    response = generator_view(request)
-    response_data = json.loads(response.content)
-    assert len(response_data['key']) > 0
+        with allure.step("Assert response contains 'key' field which is non-empty"):
+            response_data = json.loads(response.content)
+            assert 'key' in response_data, "'key' field missing in response"
+            assert len(response_data['key']) > 0, "'key' field is empty"
