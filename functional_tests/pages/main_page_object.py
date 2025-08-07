@@ -1,3 +1,5 @@
+import allure
+
 from functional_tests.pages.base_page import BasePage
 from functional_tests.locators.main_page_locators import MainPageLocators
 
@@ -5,69 +7,52 @@ from functional_tests.locators.main_page_locators import MainPageLocators
 class MainPage(BasePage):
     """Main Page action methods are here."""
 
-    def is_title_matches(self):
-        """Verifies that the hardcoded text "React App" appears in page title"""
+    EXPECTED_TITLE = "Eye-Diskage"
+    EXPECTED_URL = "http://localhost:3000/"
+    EXPECTED_HEADER = "Eye-Diskage: Django Secret Key Generator"
 
-        expected_title = "Eye-Diskage"
+    @allure.step("Verify page title matches expected")
+    def is_title_matches(self) -> bool:
+        """Check if the page title matches the expected value."""
+        return self.get_title() == self.EXPECTED_TITLE
 
-        return expected_title == self.driver.title
+    @allure.step("Verify page URL matches expected")
+    def is_url_matches(self) -> bool:
+        """Check if the page URL matches the expected value."""
+        return self.get_current_url() == self.EXPECTED_URL
 
-    def is_url_matches(self):
-        """Verifies that the URL is correct on Main Page"""
+    @allure.step("Check if main header text matches expected")
+    def is_main_header_matches(self) -> bool:
+        """Verify the main header text matches the expected value."""
+        return self.get_text(MainPageLocators.MAIN_HEADER) == self.EXPECTED_HEADER
 
-        page_url = 'http://localhost:3000/'
+    @allure.step("Click navigation button: Django Secret Key Gen")
+    def click_navigation_button_main(self) -> bool:
+        """Click the main nav button and verify URL."""
+        self.click(MainPageLocators.NAV_BUTTON_MAIN)
+        return self.get_current_url() == "http://localhost:3000/main"
 
-        return page_url == self.driver.current_url
+    @allure.step("Click navigation button: Random Number Generator")
+    def click_navigation_button_nums(self) -> bool:
+        """Click the numbers nav button and verify URL."""
+        self.click(MainPageLocators.NAV_BUTTON_NUMS)
+        return self.get_current_url() == "http://localhost:3000/random/numbers"
 
-    def is_main_header_matches(self):
-        """Triggers the navigation and checks main header text"""
+    @allure.step("Click navigation button: Caesar Cipher")
+    def click_navigation_button_caesar(self) -> bool:
+        """Click the Caesar nav button and verify URL."""
+        self.click(MainPageLocators.NAV_BUTTON_CAESAR)
+        return self.get_current_url() == "http://localhost:3000/caesar"
 
-        element = self.driver.find_element(*MainPageLocators.MAIN_HEADER)
-        expected_header = 'Eye-Diskage: Django Secret Key Generator'
+    @allure.step("Click navigation button: Vigenère Cipher")
+    def click_navigation_button_vigenere(self) -> bool:
+        """Click the Vigenère nav button and verify URL."""
+        self.click(MainPageLocators.NAV_BUTTON_VIGENERE)
+        return self.get_current_url() == "http://localhost:3000/vigenere"
 
-        return expected_header == element.text
-
-    def click_navigation_button_main(self):
-        """Triggers the navigation button and checks URL"""
-
-        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_MAIN)
+    @allure.step("Click navigation button: Colyte")
+    def click_navigation_button_colyte(self) -> bool:
+        """Click the Colyte nav button and verify it points to the expected external link."""
+        element = self.find(MainPageLocators.NAV_BUTTON_COLYTE)
         element.click()
-        page_url = 'http://localhost:3000/main'
-
-        return page_url == self.driver.current_url
-
-    def click_navigation_button_nums(self):
-        """Triggers the navigation button and checks URL"""
-
-        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_NUMS)
-        element.click()
-        page_url = 'http://localhost:3000/random/numbers'
-
-        return page_url == self.driver.current_url
-
-    def click_navigation_button_caesar(self):
-        """Triggers the navigation button and checks URL"""
-
-        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_CAESAR)
-        element.click()
-        page_url = 'http://localhost:3000/caesar'
-
-        return page_url == self.driver.current_url
-
-    def click_navigation_button_vigenere(self):
-        """Triggers the navigation button and checks URL"""
-
-        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_VIGENERE)
-        element.click()
-        page_url = 'http://localhost:3000/vigenere'
-
-        return page_url == self.driver.current_url
-
-    def click_navigation_button_colyte(self):
-        """Triggers the navigation button and checks URL"""
-
-        element = self.driver.find_element(*MainPageLocators.NAV_BUTTON_COLYTE)
-        element.click()
-        page_url = 'https://colyte.pro/'
-
-        return page_url == element.get_attribute('href')
+        return element.get_attribute('href') == "https://colyte.pro/"
