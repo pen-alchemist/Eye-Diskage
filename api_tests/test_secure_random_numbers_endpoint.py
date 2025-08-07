@@ -1,327 +1,116 @@
 import json
+import pytest
+import allure
 
 from rest_framework import status
+from django.http import HttpRequest
 
 from backend.views import secure_random_numbers_view
 
 
-def test_secure_random_numbers_view_post_valid_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a valid POST request."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_200_OK
+@allure.feature("Secure Random Numbers API")
+class TestSecureRandomNumbersView:
+    @pytest.fixture
+    def valid_payload(self) -> dict:
+        return {'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True}
 
-def test_secure_random_numbers_view_post_valid_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a valid POST request."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
+    @pytest.fixture
+    def default_payload(self) -> dict:
+        return {'min_value': 1, 'max_value': 10}
 
-def test_secure_random_numbers_view_post_valid_response_contains_random_numbers(rf, secure_random_numbers_url):
-    """Test that the response contains 'random_numbers' for a valid POST request."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert 'random_numbers' in json_data
+    def _post_request(self, rf: HttpRequest, url: str, data: dict):
+        request = rf.post(url, data=data)
+        response = secure_random_numbers_view(request)
+        response.render()
+        return response, json.loads(response.content)
 
-def test_secure_random_numbers_view_post_valid_response_random_numbers_length(rf, secure_random_numbers_url):
-    """Test the length of 'random_numbers' for a valid POST request."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert len(json_data['random_numbers']) == 5
+    @allure.story("Valid requests")
+    @allure.title("Valid POST returns 200 and correct data structure")
+    def test_post_valid(self, rf, secure_random_numbers_url, valid_payload):
+        response, json_data = self._post_request(rf, secure_random_numbers_url, valid_payload)
+        assert response.status_code == status.HTTP_200_OK, "Expected status 200 OK"
+        assert response['Content-Type'] == 'application/json', "Expected Content-Type application/json"
+        assert 'random_numbers' in json_data, "'random_numbers' key missing in response"
+        assert len(json_data['random_numbers']) == valid_payload['count'], "Length of random_numbers does not match count"
+        assert all(valid_payload['min_value'] <= num <= valid_payload['max_value'] for num in json_data['random_numbers']), "Random numbers out of specified range"
 
-def test_secure_random_numbers_view_post_valid_response_random_numbers_range(rf, secure_random_numbers_url):
-    """Test that all numbers in 'random_numbers' are within the valid range for a valid POST request."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert all(1 <= num <= 10 for num in json_data['random_numbers'])
+    @allure.story("Valid requests")
+    @allure.title("POST with default count and unique returns 200 and correct data")
+    def test_post_default_count_unique(self, rf, secure_random_numbers_url, default_payload):
+        response, json_data = self._post_request(rf, secure_random_numbers_url, default_payload)
+        assert response.status_code == status.HTTP_200_OK, "Expected status 200 OK"
+        assert response['Content-Type'] == 'application/json', "Expected Content-Type application/json"
+        assert 'random_numbers' in json_data, "'random_numbers' key missing in response"
+        assert len(json_data['random_numbers']) == 1, "Default count expected to be 1"
+        assert all(default_payload['min_value'] <= num <= default_payload['max_value'] for num in json_data['random_numbers']), "Random numbers out of specified range"
 
-def test_secure_random_numbers_view_post_default_count_and_unique_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with default count and unique values."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_200_OK
+    @allure.story("Invalid requests - missing parameters")
+    @pytest.mark.parametrize(
+        "payload, missing_field",
+        [
+            ({'max_value': 10, 'count': 5, 'unique': True}, "min_value"),
+            ({'min_value': 1, 'count': 5, 'unique': True}, "max_value"),
+        ]
+    )
+    @allure.title("POST missing required fields returns 400 with error")
+    def test_post_missing_fields(self, rf, secure_random_numbers_url, payload, missing_field):
+        response, json_data = self._post_request(rf, secure_random_numbers_url, payload)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST, f"Expected 400 Bad Request when missing {missing_field}"
+        assert response['Content-Type'] == 'application/json'
+        assert json_data == {"error": "min_value and max_value are required."}
 
-def test_secure_random_numbers_view_post_default_count_and_unique_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with default count and unique values."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
+    @allure.story("Invalid requests - invalid count")
+    @pytest.mark.parametrize(
+        "payload, expected_error",
+        [
+            ({'min_value': 1, 'max_value': 10, 'count': 0, 'unique': True}, 'count cannot be less or equal 0'),
+            ({'min_value': 1, 'max_value': 10, 'count': 1001, 'unique': True}, 'count cannot be more than 1000'),
+        ]
+    )
+    @allure.title("POST invalid count returns 400 with error")
+    def test_post_invalid_count(self, rf, secure_random_numbers_url, payload, expected_error):
+        response, json_data = self._post_request(rf, secure_random_numbers_url, payload)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response['Content-Type'] == 'application/json'
+        assert json_data == {"error": expected_error}
 
-def test_secure_random_numbers_view_post_default_count_and_unique_response_contains_random_numbers(rf, secure_random_numbers_url):
-    """Test that the response contains 'random_numbers' for a POST request with default count and unique values."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert 'random_numbers' in json_data
+    @allure.story("Invalid requests - invalid min/max")
+    @pytest.mark.parametrize(
+        "payload",
+        [
+            {'min_value': 'invalid', 'max_value': 'invalid', 'count': 5, 'unique': True},
+            {'min_value': 10, 'max_value': 1, 'count': 5, 'unique': True},  # min_value > max_value
+        ]
+    )
+    @allure.title("POST invalid min/max values returns 400 with error")
+    def test_post_invalid_min_max(self, rf, secure_random_numbers_url, payload):
+        response, json_data = self._post_request(rf, secure_random_numbers_url, payload)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response['Content-Type'] == 'application/json'
+        assert "error" in json_data
 
-def test_secure_random_numbers_view_post_default_count_and_unique_response_random_numbers_length(rf, secure_random_numbers_url):
-    """Test the length of 'random_numbers' for a POST request with default count and unique values."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert len(json_data['random_numbers']) == 1  # Default count is 1
+    @allure.story("HTTP method validation")
+    @pytest.mark.parametrize(
+        "method",
+        ['get', 'put', 'delete', 'patch']
+    )
+    @allure.title("Invalid HTTP methods return 405 Method Not Allowed")
+    def test_invalid_methods(self, rf, secure_random_numbers_url, method):
+        request_method = getattr(rf, method)
+        request = request_method(secure_random_numbers_url)
+        response = secure_random_numbers_view(request)
+        response.render()
+        json_data = json.loads(response.content)
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert response['Content-Type'] == 'application/json'
+        assert json_data == {'detail': f'Method "{method.upper()}" not allowed.'}
 
-def test_secure_random_numbers_view_post_default_count_and_unique_response_random_numbers_range(rf, secure_random_numbers_url):
-    """Test that all numbers in 'random_numbers' are within the valid range for a POST request with default count and unique values."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert all(1 <= num <= 10 for num in json_data['random_numbers'])
-
-def test_secure_random_numbers_view_post_missing_min_value_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with a missing min_value."""
-    request = rf.post(secure_random_numbers_url, data={'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-def test_secure_random_numbers_view_post_missing_min_value_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with a missing min_value."""
-    request = rf.post(secure_random_numbers_url, data={'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_missing_min_value_response_data(rf, secure_random_numbers_url):
-    """Test the response data for a POST request with a missing min_value."""
-    request = rf.post(secure_random_numbers_url, data={'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {"error": "min_value and max_value are required."}
-
-def test_secure_random_numbers_view_post_missing_max_value_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with a missing max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-def test_secure_random_numbers_view_post_missing_max_value_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with a missing max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_missing_max_value_response_data(rf, secure_random_numbers_url):
-    """Test the response data for a POST request with a missing max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {"error": "min_value and max_value are required."}
-
-def test_secure_random_numbers_view_post_invalid_count_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with an invalid count."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 0, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-def test_secure_random_numbers_view_post_invalid_count_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with an invalid count."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 0, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_invalid_count_response_data(rf, secure_random_numbers_url):
-    """Test the response data for a POST request with an invalid count."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 0, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'error': 'count cannot be less or equal 0'}
-
-def test_secure_random_numbers_view_post_count_exceeds_limit_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with a count exceeding the limit."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 1001, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-def test_secure_random_numbers_view_post_count_exceeds_limit_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with a count exceeding the limit."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 1001, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_count_exceeds_limit_response_data(rf, secure_random_numbers_url):
-    """Test the response data for a POST request with a count exceeding the limit."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 1001, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {"error": "count cannot be more than 1000"}
-
-def test_secure_random_numbers_view_post_invalid_min_max_values_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with invalid min_value and max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 'invalid', 'max_value': 'invalid', 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-def test_secure_random_numbers_view_post_invalid_min_max_values_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with invalid min_value and max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 'invalid', 'max_value': 'invalid', 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_invalid_min_max_values_response_data(rf, secure_random_numbers_url):
-    """Test the response data for a POST request with invalid min_value and max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 'invalid', 'max_value': 'invalid', 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert "error" in json_data
-
-def test_secure_random_numbers_view_post_min_value_greater_than_max_value_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with min_value greater than max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 10, 'max_value': 1, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-def test_secure_random_numbers_view_post_min_value_greater_than_max_value_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with min_value greater than max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 10, 'max_value': 1, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_min_value_greater_than_max_value_response_data(rf, secure_random_numbers_url):
-    """Test the response data for a POST request with min_value greater than max_value."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 10, 'max_value': 1, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert "error" in json_data
-
-def test_secure_random_numbers_view_post_get_request_status_code(rf, secure_random_numbers_url):
-    """Test the status code for an invalid GET request."""
-    request = rf.get(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-def test_secure_random_numbers_view_post_get_request_response_type(rf, secure_random_numbers_url):
-    """Test the response type for an invalid GET request."""
-    request = rf.get(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_get_request_response_data(rf, secure_random_numbers_url):
-    """Test the response data for an invalid GET request."""
-    request = rf.get(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "GET" not allowed.'}
-
-def test_secure_random_numbers_view_post_put_request_status_code(rf, secure_random_numbers_url):
-    """Test the status code for an invalid PUT request."""
-    request = rf.put(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-def test_secure_random_numbers_view_post_put_request_response_type(rf, secure_random_numbers_url):
-    """Test the response type for an invalid PUT request."""
-    request = rf.put(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_put_request_response_data(rf, secure_random_numbers_url):
-    """Test the response data for an invalid PUT request."""
-    request = rf.put(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "PUT" not allowed.'}
-
-def test_secure_random_numbers_view_post_delete_request_status_code(rf, secure_random_numbers_url):
-    """Test the status code for an invalid DELETE request."""
-    request = rf.delete(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-def test_secure_random_numbers_view_post_delete_request_response_type(rf, secure_random_numbers_url):
-    """Test the response type for an invalid DELETE request."""
-    request = rf.delete(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_delete_request_response_data(rf, secure_random_numbers_url):
-    """Test the response data for an invalid DELETE request."""
-    request = rf.delete(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "DELETE" not allowed.'}
-
-def test_secure_random_numbers_view_post_patch_request_status_code(rf, secure_random_numbers_url):
-    """Test the status code for an invalid PATCH request."""
-    request = rf.patch(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-def test_secure_random_numbers_view_post_patch_request_response_type(rf, secure_random_numbers_url):
-    """Test the response type for an invalid PATCH request."""
-    request = rf.patch(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_post_patch_request_response_data(rf, secure_random_numbers_url):
-    """Test the response data for an invalid PATCH request."""
-    request = rf.patch(secure_random_numbers_url)
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert json_data == {'detail': 'Method "PATCH" not allowed.'}
-
-def test_secure_random_numbers_view_with_allowany_permission_status_code(rf, secure_random_numbers_url):
-    """Test the status code for a POST request with AllowAny permission."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    assert response.status_code == status.HTTP_200_OK
-
-def test_secure_random_numbers_view_with_allowany_permission_response_type(rf, secure_random_numbers_url):
-    """Test the response type for a POST request with AllowAny permission."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    assert response['Content-Type'] == 'application/json'
-
-def test_secure_random_numbers_view_with_allowany_permission_response_contains_random_numbers(rf, secure_random_numbers_url):
-    """Test that the response contains 'random_numbers' for a POST request with AllowAny permission."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert 'random_numbers' in json_data
-
-def test_secure_random_numbers_view_with_allowany_permission_response_random_numbers_length(rf, secure_random_numbers_url):
-    """Test the length of 'random_numbers' for a POST request with AllowAny permission."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert len(json_data['random_numbers']) == 5
-
-def test_secure_random_numbers_view_with_allowany_permission_response_random_numbers_range(rf, secure_random_numbers_url):
-    """Test that all numbers in 'random_numbers' are within the valid range for a POST request with AllowAny permission."""
-    request = rf.post(secure_random_numbers_url, data={'min_value': 1, 'max_value': 10, 'count': 5, 'unique': True})
-    response = secure_random_numbers_view(request)
-    response.render()
-    json_data = json.loads(response.content.decode('utf-8'))
-    assert all(1 <= num <= 10 for num in json_data['random_numbers'])
+    @allure.story("Permission tests")
+    @allure.title("POST request with AllowAny permission returns 200 with expected data")
+    def test_post_allow_any_permission(self, rf, secure_random_numbers_url, valid_payload):
+        response, json_data = self._post_request(rf, secure_random_numbers_url, valid_payload)
+        assert response.status_code == status.HTTP_200_OK
+        assert response['Content-Type'] == 'application/json'
+        assert 'random_numbers' in json_data
+        assert len(json_data['random_numbers']) == valid_payload['count']
+        assert all(valid_payload['min_value'] <= num <= valid_payload['max_value'] for num in json_data['random_numbers'])
