@@ -1,132 +1,123 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './VigenereStyle.css'; // Assuming you have a separate CSS file for styling
-import logo from './logo.png';
+import './VigenereStyle.css';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-const API_URL = process.env.REACT_APP_API_URL || ''; // Update with your Django backend URL
+const API_URL = process.env.REACT_APP_API_URL || '';
 
 const VigenereCipherPage = () => {
   const [text, setText] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
-  const [key, setKey] = useState(''); // Key for Vigenère cipher
-  const [mode, setMode] = useState('encrypt'); // Default mode is 'encrypt'
+  const [key, setKey] = useState('');
+  const [mode, setMode] = useState('encrypt');
+  const [loading, setLoading] = useState(false);
 
   const handleEncrypt = async () => {
     if (!text.trim()) {
-      setError('Please enter some text.');
+      setError('ERR_INPUT: Data packet empty. Please enter text.');
       return;
     }
 
     if (!key.trim()) {
-      setError('Please enter a key.');
+      setError('ERR_KEY: Vigenère matrix key is required.');
       return;
     }
 
+    setLoading(true);
+    setError('');
+
     try {
       const response = await axios.post(
-        `${API_URL}/api/eye_diskage/vigenere-cipher/`, // Update the endpoint
+        `${API_URL}/api/eye_diskage/vigenere-cipher/`,
         { text, key, mode },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       if (response.status === 200) {
-        setResult(response.data.result); // Set the result from the response
-        setError('');
+        setResult(response.data.result);
       }
     } catch (err) {
       if (err.response && err.response.status === 400) {
-        setError(err.response.data.error); // Display error message from the backend
+        setError(err.response.data.error);
       } else {
-        setError('An error occurred. Please try again.');
+        setError('ERR_CONNECTION: Uplink failed. Please try again.');
       }
       setResult('');
     }
+    setLoading(false);
   };
 
   return (
-    <div className="home-container">
-      <header className="header">
-        <img src={logo} alt="logo" />
-        <h2 id="main-header2"> Eye-Diskage: Vigenère Cipher Encryption/Decryption </h2>
-      </header>
-      <header className="header2">
-        <nav className="header-nav">
-          <a href="/main">Home Page</a>
-          <a href="/django">Django Secret Key Gen</a>
-          <a href="/random/numbers">Random Number Generator</a>
-          <a href="/caesar">Caesar Cipher</a>
-          <a href="/vigenere">Vigenère Cipher</a>
-          <a href="https://colyte.pro/" target="_blank">Colyte</a>
-        </nav>
-      </header>
+    <div className="page-container">
+      <div className="glass-panel module-container">
+        <div className="module-header">
+          <h2 className="glitch-text" data-text="VIGENERE_CIPHER">VIGENERE_CIPHER</h2>
+          <span className="status-badge">MATRIX_ALIGNED</span>
+        </div>
 
-      <main className="main">
-        <section className="hero">
-          <h1>Encrypt/Decrypt Your Text</h1>
-          <textarea
-            placeholder="Enter text to encrypt/decrypt..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={5}
-            cols={50}
-          />
-          {error && <p className="error-message">{error}</p>}
+        <div className="module-body flex-layout">
+          <div className="controls-panel">
+            <h3 className="panel-title">INPUT_STREAM</h3>
 
-          <div className="controls">
-            <label>
-              Key:
-              <input
-                type="text"
-                value={key}
-                onChange={(e) => setKey(e.target.value)}
-                placeholder="Enter key..."
-              />
-            </label>
+            <textarea
+              className="cyber-textarea"
+              placeholder="Enter text payload..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={4}
+            />
 
-            <label>
-              Mode:
-              <select value={mode} onChange={(e) => setMode(e.target.value)}>
-                <option value="encrypt">Encrypt</option>
-                <option value="decrypt">Decrypt</option>
-              </select>
-            </label>
+            <div className="flex-row">
+              <div className="cyber-input-group flex-2">
+                <label>CIPHER_KEY (TEXT)</label>
+                <input
+                  type="text"
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
+                  placeholder="Enter key..."
+                />
+              </div>
+
+              <div className="cyber-input-group flex-1">
+                <label>OP_MODE</label>
+                <select value={mode} onChange={(e) => setMode(e.target.value)}>
+                  <option value="encrypt">ENCRYPT</option>
+                  <option value="decrypt">DECRYPT</option>
+                </select>
+              </div>
+            </div>
+
+            <button className="btn-cyber w-100 mt-2" onClick={handleEncrypt} disabled={loading}>
+              {loading ? 'PROCESSING_MATRIX...' : 'EXECUTE_OP'}
+            </button>
+
+            {error && <div className="error-box mt-3">{error}</div>}
           </div>
 
-          <nav>
-            <button className="vigenere-one" onClick={handleEncrypt}>
-              {mode === 'encrypt' ? 'Encrypt' : 'Decrypt'}
-            </button>
-            <button className="vigenere-zero" onClick={() => navigator.clipboard.writeText(result)}>
-              Copy Result
-            </button>
-          </nav>
+          <div className="output-panel">
+            <h3 className="panel-title">OUTPUT_STREAM</h3>
 
-          {result && (
-            <div className="result-container">
-              <h3>{mode === 'encrypt' ? 'Encrypted Text:' : 'Decrypted Text:'}</h3>
-              <textarea
-                readOnly
-                value={result}
-                rows={5}
-                cols={50}
-                className="result-textarea"
-              />
-            </div>
-          )}
-        </section>
-      </main>
+            <textarea
+              className="cyber-textarea result-readonly"
+              readOnly
+              value={result || 'AWAITING_DATA...'}
+              rows={6}
+            />
 
-      <footer className="vigenere-footer">
-        <p>&copy; 2025 by Yehor Romanov aka @pen-alchemist </p>
-      </footer>
+            {result && (
+              <button
+                className="btn-cyber outline mt-3 w-100"
+                onClick={() => navigator.clipboard.writeText(result)}
+              >
+                COPY_BUFFER
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
