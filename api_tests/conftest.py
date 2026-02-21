@@ -2,6 +2,7 @@ import pytest
 
 from django.test import RequestFactory
 
+
 @pytest.fixture(scope="session")
 def rf():
     """Django RequestFactory instance for creating mock requests."""
