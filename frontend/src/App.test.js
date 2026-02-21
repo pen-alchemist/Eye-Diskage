@@ -1,8 +1,9 @@
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders app and ThemeProvider', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  const linkElement = screen.getByText(/CYBERPUNK TIMELINE/i);
   expect(linkElement).toBeInTheDocument();
 });
