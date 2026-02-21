@@ -1,13 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+  /* Default: Dark Mode + Blue Pill (Matrix/CERN) */
+  --bg-color: #050510;
+  --text-color: #e0e0e0;
+  --primary-color: #00ff41; /* Matrix green */
+  --secondary-color: #0d82df; /* CERN sterile blue */
+  --accent-color: #a3ffc2;
+  --font-main: 'Share Tech Mono', monospace;
+  --font-heading: 'Orbitron', sans-serif;
+  --neon-glow: 0 0 10px rgba(0, 255, 65, 0.7), 0 0 20px rgba(0, 255, 65, 0.5);
+  --bg-gradient: linear-gradient(135deg, #020205 0%, #0a0f18 100%);
+  --card-bg: rgba(10, 20, 30, 0.6);
+  --border-color: rgba(0, 255, 65, 0.3);
+}
+
+:root.light-theme {
+  --bg-color: #f0f4f8;
+  --text-color: #1a1a24;
+  --primary-color: #008822;
+  --secondary-color: #005bb5;
+  --accent-color: #00cf37;
+  --neon-glow: 0 0 10px rgba(0, 136, 34, 0.4);
+  --bg-gradient: linear-gradient(135deg, #e6ecf2 0%, #ffffff 100%);
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --border-color: rgba(0, 136, 34, 0.3);
+}
+
+:root.pill-red {
+  /* Red Pill: Cyberpunk Edgerunners (Chaotic, Neon) */
+  --bg-color: #0a020d;
+  --text-color: #fce8ff;
+  --primary-color: #ff0055; /* Edgerunners pink/red */
+  --secondary-color: #00f0ff; /* Cyan */
+  --accent-color: #fcee0a; /* Cyberpunk yellow */
+  --neon-glow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(0, 240, 255, 0.6);
+  --bg-gradient: repeating-linear-gradient(45deg, #0a020d, #0a020d 10px, #1a0520 10px, #1a0520 20px);
+  --card-bg: rgba(25, 5, 25, 0.7);
+  --border-color: rgba(255, 0, 85, 0.5);
+}
+
+:root.light-theme.pill-red {
+  --bg-color: #ffe6f0;
+  --text-color: #2a0514;
+  --primary-color: #d10046;
+  --secondary-color: #00b3cc;
+  --accent-color: #cca400;
+  --neon-glow: 0 0 10px rgba(209, 0, 70, 0.5);
+  --bg-gradient: repeating-linear-gradient(45deg, #ffe6f0, #ffe6f0 10px, #ffccd9 10px, #ffccd9 20px);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --border-color: rgba(209, 0, 70, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  font-family: var(--font-main);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-color);
+  transition: all 0.4s ease;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+a:hover {
+  color: var(--secondary-color);
+  text-shadow: var(--neon-glow);
+}
+
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+button.btn-cyber {
+  background: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--primary-color);
+  padding: 10px 20px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  text-transform: uppercase;
+}
+
+button.btn-cyber:hover {
+  background: var(--primary-color);
+  color: var(--bg-color);
+  box-shadow: var(--neon-glow);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
 }
