@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CaesarStyle.css';
-import logo from './logo.png';
+import './RandomStyle.css';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -15,131 +14,105 @@ const RandomNumberPage = () => {
   const [unique, setUnique] = useState(true);
   const [randomNumbers, setRandomNumbers] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
     if (minValue >= maxValue) {
-      setError('min_value must be less than max_value.');
+      setError('ERR_BOUNDS: min_value must be less than max_value.');
       return;
     }
+
+    setLoading(true);
+    setError('');
 
     try {
       const response = await axios.post(
         `${API_URL}/api/eye_diskage/secure-random-numbers/`,
         { min_value: minValue, max_value: maxValue, count, unique },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       if (response.status === 200) {
-        setRandomNumbers(response.data.random_numbers); // Set the random numbers from the response
-        setError('');
+        setRandomNumbers(response.data.random_numbers);
       }
     } catch (err) {
       if (err.response && err.response.status === 400) {
-        setError(err.response.data.error); // Display error message from the backend
+        setError(err.response.data.error);
       } else {
-        setError('An error occurred. Please try again.');
+        setError('ERR_CONNECTION: An error occurred communicating with the generator node.');
       }
       setRandomNumbers([]);
     }
+    setLoading(false);
   };
 
   return (
-    <div className="home-container">
-      <header className="header">
-        <img src={logo} alt="logo" />
-        <h2 id="main-header2"> Eye-Diskage: Secure Random Number Generator </h2>
-      </header>
-      <header className="header2">
-        <nav className="header-nav">
-          <a href="/main">Home Page</a>
-          <a href="/django">Django Secret Key Gen</a>
-          <a href="/random/numbers">Random Number Generator</a>
-          <a href="/caesar">Caesar Cipher</a>
-          <a href="/vigenere">Vigenère Cipher</a>
-          <a href="https://colyte.pro/" target="_blank">Colyte</a>
-        </nav>
-      </header>
+    <div className="page-container">
+      <div className="glass-panel module-container">
+        <div className="module-header">
+          <h2 className="glitch-text" data-text="RNG_CORE">RNG_CORE</h2>
+          <span className="status-badge">ENTROPY_SYNCED</span>
+        </div>
 
-      <main className="main">
-        <section className="hero">
-          <h1>Generate Secure Random Numbers</h1>
+        <div className="module-body flex-layout">
+          <div className="controls-panel">
+            <h3 className="panel-title">PARAMETERS</h3>
 
-          <div className="controls">
-            <label>
-              Min Value:
-              <input
-                type="number"
-                value={minValue}
-                onChange={(e) => setMinValue(parseInt(e.target.value))}
-              />
-            </label>
+            <div className="cyber-input-group">
+              <label>MIN_VAL</label>
+              <input type="number" value={minValue} onChange={(e) => setMinValue(parseInt(e.target.value) || 0)} />
+            </div>
 
-            <label>
-              Max Value:
-              <input
-                type="number"
-                value={maxValue}
-                onChange={(e) => setMaxValue(parseInt(e.target.value))}
-              />
-            </label>
+            <div className="cyber-input-group">
+              <label>MAX_VAL</label>
+              <input type="number" value={maxValue} onChange={(e) => setMaxValue(parseInt(e.target.value) || 0)} />
+            </div>
 
-            <label>
-              Count:
-              <input
-                type="number"
-                value={count}
-                onChange={(e) => setCount(parseInt(e.target.value))}
-              />
-            </label>
+            <div className="cyber-input-group">
+              <label>ITERATIONS</label>
+              <input type="number" value={count} onChange={(e) => setCount(parseInt(e.target.value) || 1)} />
+            </div>
 
-            <label>
-              Unique:
-              <select
-                value={unique}
-                onChange={(e) => setUnique(e.target.value === 'true')}
-              >
-                <option value={true}>Yes</option>
-                <option value={false}>No</option>
+            <div className="cyber-input-group">
+              <label>UNIQUE_CONSTRAINT</label>
+              <select value={unique} onChange={(e) => setUnique(e.target.value === 'true')}>
+                <option value={true}>ENABLED / YES</option>
+                <option value={false}>DISABLED / NO</option>
               </select>
-            </label>
+            </div>
+
+            <button className="btn-cyber w-100 mt-2" onClick={handleGenerate} disabled={loading}>
+              {loading ? 'CALCULATING_ENTROPY...' : 'INITIALIZE_RNG'}
+            </button>
+
+            {error && <div className="error-box mt-3">{error}</div>}
           </div>
 
-          {error && <p className="error-message">{error}</p>}
-
-          <nav>
-            <button className="caesar-one" onClick={handleGenerate}>
-              Generate
-            </button>
-            <button
-              className="caesar-zero"
-              onClick={() => navigator.clipboard.writeText(randomNumbers.join(', '))}
-            >
-              Copy Result
-            </button>
-          </nav>
-
-          {randomNumbers.length > 0 && (
-            <div className="result-container">
-              <h3>Generated Random Numbers:</h3>
-              <textarea
-                readOnly
-                value={randomNumbers.join(', ')}
-                rows={5}
-                cols={50}
-                className="result-textarea"
-              />
+          <div className="output-panel">
+            <h3 className="panel-title">DATA_OUTPUT</h3>
+            <div className="result-matrix">
+              {randomNumbers.length > 0 ? (
+                <div className="matrix-numbers">
+                  {randomNumbers.map((num, idx) => (
+                    <span key={idx} className="matrix-num">{num}</span>
+                  ))}
+                </div>
+              ) : (
+                <div className="waiting-text">AWAITING_INITIALIZATION...</div>
+              )}
             </div>
-          )}
-        </section>
-      </main>
 
-      <footer className="caesar-footer">
-        <p>&copy; 2025 by Yehor Romanov aka @pen-alchemist </p>
-      </footer>
+            {randomNumbers.length > 0 && (
+              <button
+                className="btn-cyber outline mt-3 w-100"
+                onClick={() => navigator.clipboard.writeText(randomNumbers.join(', '))}
+              >
+                COPY_DATA_STREAM
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
