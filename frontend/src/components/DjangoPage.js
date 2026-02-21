@@ -1,75 +1,82 @@
- import React, { useEffect, useState } from 'react';
- import { Link, useNavigate, useLocation } from 'react-router-dom';
- import './MainStyle.css';
- import logo from './logo.png'
- import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import './DjangoStyle.css';
+import axios from 'axios';
 
- axios.defaults.xsrfCookieName = 'csrftoken';
- axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
- const API_URL = process.env.REACT_APP_API_URL || '';
+const API_URL = process.env.REACT_APP_API_URL || '';
 
- const Main = ({ authStatus }) => {
-  const navigate = useNavigate();
-    const location = useLocation();
-    const [data, setData] = useState({
-        key: ''
-    });
+const DjangoPage = () => {
+  const [data, setData] = useState({ key: '' });
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-const fetchData = async () => {
-        try {
-            const response = await axios(`${API_URL}/api/eye_diskage/django-ker-generate/`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const { key } = response.data;
-            setData({
-                key
-            });
-        } catch (error) {}
-    };
+  const fetchData = async () => {
+    setLoading(true);
+    setCopied(false);
+    try {
+      const response = await axios(`${API_URL}/api/eye_diskage/django-ker-generate/`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const { key } = response.data;
+      setData({ key });
+    } catch (error) {
+      console.error(error);
+      setData({ key: 'ERROR_GENERATING_KEY' });
+    }
+    setLoading(false);
+  };
 
-    useEffect(() => {
-        fetchData();
-    }, [navigate, location]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleCopy = () => {
+    if (data.key) {
+      navigator.clipboard.writeText(data.key);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
-    <div className="home-container">
-      <header className="header">
-            <img src={logo} />
-            <h2 id="main-header2"> Eye-Diskage: Django Secret Key Generator </h2>
-      </header>
-      <header className="header2">
-        <nav className="header-nav">
-          <a href="/main">Home Page</a>
-          <a href="/django">Django Secret Key Gen</a>
-          <a href="/random/numbers">Random Number Generator</a>
-          <a href="/caesar">Caesar Cipher</a>
-          <a href="/vigenere">Vigenère Cipher</a>
-          <a href="https://colyte.pro/" target="_blank">Colyte</a>
-        </nav>
-      </header>
+    <div className="page-container">
+      <div className="glass-panel module-container">
+        <div className="module-header">
+          <h2 className="glitch-text" data-text="DJANGO_KEY_GEN">DJANGO_KEY_GEN</h2>
+          <span className="status-badge">SECURE_LEVEL_9</span>
+        </div>
 
-      <main className="main">
-        <section className="hero">
-            <h1>Your Secret Key</h1>
-            <h3 className="post-short">{data.key}</h3>
-            <nav>
-                <button className="one" onClick={() => fetchData()}>Refresh</button>
-                <button className="zero" onClick={() => {navigator.clipboard.writeText(data.key)}}>Copy</button>
-            </nav>
-        </section>
-      </main>
+        <div className="module-body">
+          <p className="instruction-text">Initiating cryptographic routine to generate a secure 50-character random string compliant with Django secret key specifications.</p>
 
-      <footer className="footer">
-        <p><a href="https://docs.djangoproject.com/en/5.1/" target="_blank">Official Docs Django</a></p>
-        <p><a href="https://github.com/pen-alchemist/Eye-Diskage" target="_blank">Source Code</a></p>
-        <p>&copy; 2025 by Yehor Romanov aka @pen-alchemist </p>
-      </footer>
+          <div className="key-display-box">
+            {loading ? (
+              <span className="loading-text">GENERATING_HASH[.......]</span>
+            ) : (
+              <span className="key-text">{data.key}</span>
+            )}
+          </div>
+
+          <div className="action-buttons mt-4">
+            <button className="btn-cyber" onClick={fetchData} disabled={loading}>
+              {loading ? 'PROCESSING...' : 'REGENERATE_KEY'}
+            </button>
+            <button className={`btn-cyber outline ${copied ? 'copied' : ''}`} onClick={handleCopy} disabled={!data.key || loading}>
+              {copied ? 'COPIED_TO_CLIPBOARD' : 'COPY_KEY'}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="docs-link mt-4 text-center">
+        <a href="https://docs.djangoproject.com/en/5.1/" target="_blank" rel="noreferrer" className="cyber-link">READ OFFICIAL DJANGO DOCS</a>
+      </div>
     </div>
   );
 };
 
- export default Main;
+export default DjangoPage;
